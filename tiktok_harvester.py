@@ -7,7 +7,7 @@ session = requests.Session()
 session.headers.update({'User-Agent': 'Custom user agent'})
 
 
-def get_ticktok_video(url, storage_location):
+def get_tiktok_video(url, storage_location):
 	cwd = os.getcwd()
 	if not os.path.exists(storage_location):
 		os.makedirs(storage_location)

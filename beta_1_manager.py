@@ -10,7 +10,7 @@ import subprocess
 import configparser
 from insta_harvesters import get_live as insta_get_live
 from insta_harvesters import get_account as insta_get_account
-from tiktok_harvester import get_ticktok_video
+from tiktok_harvester import get_tiktok_video
 
 harvester = "harvester v.2"
 # project_folder = "\\".join(os.getcwd().split('\\')[:-1])
@@ -97,13 +97,13 @@ class Social_Media_Collector():
 					self.storage_folder = os.path.join(storage_folder_root, self.ui)
 					self.data[18] = self.storage_folder
 					if self.ready == "Y" and self.collected != "Y":
-						
+
 						if self.content_type == "InstagramAccount":
 							flag, self.location = insta_get_account()
 						if self.content_type == "InstagramLive":
 							flag, self.location = insta_get_live(self.url, self.storage_folder )
 						if self.content_type == "TiktokVideo":
-								flag, self.location = get_ticktok_video(self.url, self.storage_folder )
+								flag, self.location = get_tiktok_video(self.url, self.storage_folder )
 
 								# my_harvester = Youtube_harvester(self.data)
 								# if self.content_type == "InstagramItem":
