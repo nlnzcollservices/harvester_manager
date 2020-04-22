@@ -6,6 +6,8 @@ from oauth2client import file
 from datetime import datetime as dt
 import httplib2
 import dateparser
+import subprocess
+import configparser
 
 harvester = "harvester v.2"
 project_folder = "\\".join(os.getcwd().split('\\')[:-1])
@@ -60,7 +62,9 @@ class Social_Media_Collector():
 					self.location = self.data[5]
 					self.content_type = self.data[6]
 					self.link = self.data[7]
-					self.date_range = self.data[8]
+					if "onwards" in self.data[8]:
+							self.repeating = True
+					self.date_range = dateparser.parse(self.data[8].replace("onwards", "").strip())
 					self.reccuring = self.data[9]
 					self.scope = self.data[10]
 					self.archived = dateparser.parse(self.data[11])
@@ -69,8 +73,6 @@ class Social_Media_Collector():
 					self.storage_location = self.data[14]
 					self.notes = self.data[15]
 					self.flag = False
-					if "onwards" in self.date_range:
-							self.repeating = True
 
 					self.data[16] = self.repeating
 					self.data[17] = self.row_number
@@ -96,7 +98,7 @@ class Social_Media_Collector():
 								
 							# if self.content_type == "YoutubeUser":
 									# self.flag, self.location = my_harvester.youtube_user()
-							print(self.content_type)
+							print(self.content_type, self.date_range)
 							if self.flag:
 								self.write_to_spreadsheet()
 
