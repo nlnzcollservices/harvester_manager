@@ -9,10 +9,13 @@ import dateparser
 
 harvester = "harvester v.2"
 project_folder = "\\".join(os.getcwd().split('\\')[:-1])
-sys.path.insert(0, r'H:\secrets_and_credentials')
+sys.path.insert(0, r'C:\Source\secrets_and_credentials')
 script_folder = os.getcwd()
-secrets_and_credentials_fold = r"c:\source"
-sprsh = "10gH4yPpoW-JRVIIBbsKqzoa8Qz5WvZGz52lWFqC5JuQ"
+secrets_and_credentials_fold = r"C:\Source\secrets_and_credentials"
+sprsh_file = os.path.join(secrets_and_credentials_fold, "spreadsheet")
+config = configparser.ConfigParser()
+config.read(sprsh_file)
+sprsh = config.get("configuration","sprsh")
 credential_file = os.path.join(secrets_and_credentials_fold, "credentials")
 client_secrets_file = os.path.join(secrets_and_credentials_fold, "client_secrets.json")
 store = file.Storage(client_secrets_file )
