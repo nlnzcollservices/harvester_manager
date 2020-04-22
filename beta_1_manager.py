@@ -8,6 +8,7 @@ import httplib2
 import dateparser
 import subprocess
 import configparser
+from insta_harvesters import get_live as insta_get_live
 
 harvester = "harvester v.2"
 # project_folder = "\\".join(os.getcwd().split('\\')[:-1])
@@ -17,14 +18,23 @@ secrets_and_credentials_fold = r"C:\Source\secrets_and_credentials"
 sprsh_file = os.path.join(secrets_and_credentials_fold, "spreadsheet")
 config = configparser.ConfigParser()
 config.read(sprsh_file)
+
+## credentials
 sprsh = config.get("configuration","sprsh")
+
+try:
+	insta_username = config.get("configuration","insta_user_name")
+	insta_password = config.get("configuration","insta_password")
+except configparser.NoOptionError:
+	pass
+
 credential_file = os.path.join(secrets_and_credentials_fold, "credentials")
 client_secrets_file = os.path.join(secrets_and_credentials_fold, "client_secrets.json")
 store = file.Storage(client_secrets_file )
 creds = store.get()
 #automatically renews google credentials
 if creds.access_token_expired:
-		creds.refresh(httplib2.Http())
+	creds.refresh(httplib2.Http())
 #authorizing credentials
 c = gspread.authorize(creds)
 #gets spreadsheet
@@ -88,16 +98,16 @@ class Social_Media_Collector():
 								# my_harvester = Youtube_harvester(self.data)
 								# if self.content_type == "InstagramAccount":
 								# 		flag, self.location = instagramm_account()
-								# if self.content_type == "InstagramLive":
-								# 		flag, self.location = instagramm_live()
+						if self.content_type == "InstagramLive":
+							flag, self.location = insta_get_live(self.url, self.storage_folder )
 								# if self.content_type == "InstagramItem":
 								# 		flag, self.location = instagramm_item()
 								# if self.content_type == "FacebookVideo":
 								# 		flag, self.location = facebook_video()
 								# if self.content_type == "VimeoVideo":
 								# 		flag, self.location = vimeo_video()
-								# if self.content_type == "TiktokVideo":
-								# 		flag, self.location = tiktok_video()
+						if self.content_type == "TiktokVideo":
+								flag, self.location = get_tiktok_video()
 								# if self.content_type == "YoutubeVideo":
 								# 		flag, self.location = my_harvester.youtube_video()
 								# if self.content_type == "YoutubChannel":
@@ -105,9 +115,9 @@ class Social_Media_Collector():
 								
 							# if self.content_type == "YoutubeUser":
 									# self.flag, self.location = my_harvester.youtube_user()
-							print(self.content_type, self.date_range, self.storage_folder)
-							if self.flag:
-								self.write_to_spreadsheet()
+						print(self.content_type, self.date_range, self.storage_folder)
+						if self.flag:
+							self.write_to_spreadsheet()
 
 		def write_to_spreadsheet(self):
 
