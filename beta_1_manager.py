@@ -11,7 +11,7 @@ project_folder = "\\".join(os.getcwd().split('\\')[:-1])
 sys.path.insert(0, r'H:\secrets_and_credentials')
 script_folder = os.getcwd()
 secrets_and_credentials_fold = r"H:\secrets_and_credentials"
-sprsh = "10gH4yPpoW-JRVIIBbsKqzoa8Qz5WvZGz52lWFqC5JuQ"
+sprsh = ""
 credential_file = os.path.join(secrets_and_credentials_fold, "credentials")
 client_secrets_file = os.path.join(secrets_and_credentials_fold, "client_secrets.json")
 store = file.Storage(client_secrets_file )
