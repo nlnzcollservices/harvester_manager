@@ -10,7 +10,7 @@ import subprocess
 import configparser
 
 harvester = "harvester v.2"
-project_folder = "\\".join(os.getcwd().split('\\')[:-1])
+# project_folder = "\\".join(os.getcwd().split('\\')[:-1])
 sys.path.insert(0, r'C:\Source\secrets_and_credentials')
 script_folder = os.getcwd()
 secrets_and_credentials_fold = r"C:\Source\secrets_and_credentials"
@@ -31,6 +31,12 @@ c = gspread.authorize(creds)
 gs = c.open_by_key(sprsh)
 #gets sheet by name
 ws = gs.worksheet("Sheet1")
+
+### make storage folder 
+storage_folder_root = "./harvests"
+if not os.path.exists(storage_folder_root):
+	os.makedirs(storage_folder_root) 
+
 
 class Social_Media_Collector():
 		def __init__(self, data ,row_number):
@@ -77,6 +83,7 @@ class Social_Media_Collector():
 					self.data[16] = self.repeating
 					self.data[17] = self.row_number
 					self.data[18] = project_folder
+					self.storage_folder = os.path.join(storage_folder_root, self.ui)
 					if self.ready == "Y" and self.collected != "Y":
 								# my_harvester = Youtube_harvester(self.data)
 								# if self.content_type == "InstagramAccount":
@@ -98,7 +105,7 @@ class Social_Media_Collector():
 								
 							# if self.content_type == "YoutubeUser":
 									# self.flag, self.location = my_harvester.youtube_user()
-							print(self.content_type, self.date_range)
+							print(self.content_type, self.date_range, self.storage_folder)
 							if self.flag:
 								self.write_to_spreadsheet()
 
