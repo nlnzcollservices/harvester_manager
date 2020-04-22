@@ -5,13 +5,14 @@ import sys
 from oauth2client import file
 from datetime import datetime as dt
 import httplib2
+import dateparser
 
 harvester = "harvester v.2"
 project_folder = "\\".join(os.getcwd().split('\\')[:-1])
 sys.path.insert(0, r'H:\secrets_and_credentials')
 script_folder = os.getcwd()
-secrets_and_credentials_fold = r"H:\secrets_and_credentials"
-sprsh = ""
+secrets_and_credentials_fold = r"c:\source"
+sprsh = "10gH4yPpoW-JRVIIBbsKqzoa8Qz5WvZGz52lWFqC5JuQ"
 credential_file = os.path.join(secrets_and_credentials_fold, "credentials")
 client_secrets_file = os.path.join(secrets_and_credentials_fold, "client_secrets.json")
 store = file.Storage(client_secrets_file )
@@ -42,36 +43,36 @@ class Social_Media_Collector():
 				self.row_number = row_number
 				self.repeating = False
 
-			def row_parser(self):
+		def row_parser(self):
 
 					"""
 					Parsing data list and directing to relevant harvester
 
 					"""
-						self.ui = self.data[0]
-						self.description = self.data[1]
-						self.creator = self.data[2]
-						self.ready = self.data[3]
-						self.category = self.data[4]
-						self.location = self.data[5]
-						self.content_type = self.data[6]
-						self.link = self.data[7]
-						self.date_range = self.data[8]
-						self.reccuring = self.data[9]
-						self.scope = self.data[10]
-						self.archived = self.data[11]
-						self.collected = self.data[12]
-						self.responsible = self.data[13]
-						self.storage_location = self.data[14]
-						self.notes = self.data[15]
-						self.flag = False
-						if "onwards" in self.date_range:
-								self.repeating = True
+					self.ui = self.data[0]
+					self.description = self.data[1]
+					self.creator = self.data[2]
+					self.ready = self.data[3]
+					self.category = self.data[4]
+					self.location = self.data[5]
+					self.content_type = self.data[6]
+					self.link = self.data[7]
+					self.date_range = self.data[8]
+					self.reccuring = self.data[9]
+					self.scope = self.data[10]
+					self.archived = dateparser.parse(self.data[11])
+					self.collected = self.data[12]
+					self.responsible = self.data[13]
+					self.storage_location = self.data[14]
+					self.notes = self.data[15]
+					self.flag = False
+					if "onwards" in self.date_range:
+							self.repeating = True
 
-						self.data[16] = self.repeating
-						self.data[17] = self.row_number
-						self.data[18] = project_folder
-						if self.ready == "Y" and self.collected != "Y":
+					self.data[16] = self.repeating
+					self.data[17] = self.row_number
+					self.data[18] = project_folder
+					if self.ready == "Y" and self.collected != "Y":
 								# my_harvester = Youtube_harvester(self.data)
 								# if self.content_type == "InstagramAccount":
 								# 		flag, self.location = instagramm_account()
@@ -90,23 +91,23 @@ class Social_Media_Collector():
 								# if self.content_type == "YoutubChannel":
 								# 		flag, self.location = my_harvester.youtube_channel()
 								
-								print(self.content_type)
-								if self.content_type == "YoutubeUser":
-										self.flag, self.location = my_harvester.youtube_user()
-								if self.flag:
-									self.write_to_spreadsheet()
+							# if self.content_type == "YoutubeUser":
+									# self.flag, self.location = my_harvester.youtube_user()
+							print(self.content_type)
+							if self.flag:
+								self.write_to_spreadsheet()
 
-				def write_to_spreadsheet(self):
+		def write_to_spreadsheet(self):
 
-						"""
-						Writes to spreadsheet collect, responsible, storage location
+				"""
+				Writes to spreadsheet collect, responsible, storage location
 
-						"""
-						ws.uodate_cell(self.row_number, 11, dt.now().stftime("%d.%m.%Y") )
-						ws.update_cell(self.row_number, 13, harvester)
-						ws.update_cell(self.row_number, 14, self.location)
-						if self.repeating:
-								ws.update_cell(self.row_number, 12, "Y")
+				"""
+				ws.update_cell(self.row_number, 11, dt.now().stftime("%d.%m.%Y") )
+				ws.update_cell(self.row_number, 13, harvester)
+				ws.update_cell(self.row_number, 14, self.location)
+				if self.repeating:
+						ws.update_cell(self.row_number, 12, "Y")
 
 def main():
 
