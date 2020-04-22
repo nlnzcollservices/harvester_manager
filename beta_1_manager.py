@@ -102,11 +102,11 @@ class Social_Media_Collector():
 						if self.content_type == "InstagramAccount":
 							flag, self.location = insta_get_account()
 						if self.content_type == "InstagramLive":
-							flag, self.location = insta_get_live(self.url, self.storage_folder )
+							flag, self.location = insta_get_live(self.link, self.storage_folder )
 						if self.content_type == "TiktokVideo":
-							flag, self.location = get_tiktok_video(self.url, self.storage_folder )
+							flag, self.location = get_tiktok_video(self.link, self.storage_folder )
 						if self.content_type == "FacebookVideo":
-							flag, self.location = facebook_get_video(self.url, self.storage_folder)
+							flag, self.location = facebook_get_video(self.link, self.storage_folder)
 
 								# my_harvester = Youtube_harvester(self.data)
 								# if self.content_type == "InstagramItem":
