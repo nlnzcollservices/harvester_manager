@@ -59,19 +59,20 @@ class Social_Media_Collector():
                              self.content_type = self.data[6]
                              self.link = self.data[7]
                              self.date_range = self.data[8]
-                             self.sccope = self.data[9]
-                             self.archived = self.data[10]
-                             self.collected = self.data[11]
-                             self.responsible = self.data[12]
-                             self.storage_location = self.data[13]
-                             self.notes = self.data[14]
+                             self.reccuring = self.data[9]
+                             self.scope = self.data[10]
+                             self.archived = self.data[11]
+                             self.collected = self.data[12]
+                             self.responsible = self.data[13]
+                             self.storage_location = self.data[14]
+                             self.notes = self.data[15]
                              self.flag = False
                              if "onwards" in self.date_range:
                                            self.repeating = True
                              
-                             self.data[15] = self.repeating
-                             self.data[16] = self.row_number
-                             self.data[17] =project_folder
+                             self.data[16] = self.repeating
+                             self.data[17] = self.row_number
+                             self.data[18] =project_folder
                              if            self.ready == "Y" and self.collected != "Y":
                                            my_harvester = Youtube_harvester(self.data)
                              #            if self.content_type == "InstagramAccount":
@@ -102,11 +103,11 @@ class Social_Media_Collector():
                              Writes to spreadsheet collect, responsible, storage location
 
                              """
-                             ws.uodate_cell(self.row_number, 10, dt.now().stftime("%d.%m.%Y") )
-                             ws.update_cell(self.row_number, 12, harvester)
-                             ws.update_cell(self.row_number, 13, self.location)
+                             ws.uodate_cell(self.row_number, 11, dt.now().stftime("%d.%m.%Y") )
+                             ws.update_cell(self.row_number, 13, harvester)
+                             ws.update_cell(self.row_number, 14, self.location)
                              if self.repeating:
-                                           ws.update_cell(self.row_number, 11, "Y")
+                                           ws.update_cell(self.row_number, 12, "Y")
 
 def main():
 
