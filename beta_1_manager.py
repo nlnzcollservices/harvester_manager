@@ -82,8 +82,8 @@ class Social_Media_Collector():
 
 					self.data[16] = self.repeating
 					self.data[17] = self.row_number
-					self.data[18] = project_folder
 					self.storage_folder = os.path.join(storage_folder_root, self.ui)
+					self.data[18] = self.storage_folder
 					if self.ready == "Y" and self.collected != "Y":
 								# my_harvester = Youtube_harvester(self.data)
 								# if self.content_type == "InstagramAccount":
