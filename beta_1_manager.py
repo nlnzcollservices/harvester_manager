@@ -108,13 +108,13 @@ class Social_Media_Collector():
 					if self.ready == "Y" and self.collected != "Y":
 
 						if self.content_type == "InstagramAccount" and self.content_type in my_content_types:
-							flag, self.location = insta_get_account()
+							self.flag = insta_get_account()
 						elif self.content_type == "InstagramLive" and self.content_type in my_content_types:
-							flag, self.location = insta_get_live(self.link, self.storage_folder )
+							self.flag = insta_get_live(self.link, self.storage_folder )
 						elif self.content_type == "TiktokVideo" and self.content_type in my_content_types:
-							flag, self.location = get_tiktok_video(self.link, self.storage_folder )
+							self.flag = get_tiktok_video(self.link, self.storage_folder )
 						elif self.content_type == "FacebookVideo" and self.content_type in my_content_types:
-							flag, self.location = facebook_get_video(self.link, self.storage_folder)
+							self.flag = facebook_get_video(self.link, self.storage_folder)
 
 								# my_harvester = Youtube_harvester(self.data)
 								# elif self.content_type == "InstagramItem" and self.content_type in my_content_types:
@@ -126,9 +126,9 @@ class Social_Media_Collector():
 								# elif self.content_type == "YoutubChannel" and self.content_type in my_content_types:
 								# 		flag, self.location = my_harvester.youtube_channel()
 								
-								# elif self.content_type == "YoutubeUser":
-									# self.flag, self.location = my_harvester.youtube_user()
-						print(self.content_type, self.date_range, self.storage_folder)
+						elif self.content_type == "YoutubeUser" and self.content_type in my_content_types::
+							self.flag = my_harvester.youtube_user()
+						#print(self.content_type, self.date_range, self.storage_folder)
 						if self.flag:
 							self.write_to_spreadsheet()
 
@@ -140,7 +140,7 @@ class Social_Media_Collector():
 				"""
 				ws.update_cell(self.row_number, 11, dt.now().stftime("%d.%m.%Y") )
 				ws.update_cell(self.row_number, 13, harvester)
-				ws.update_cell(self.row_number, 14, self.location)
+				ws.update_cell(self.row_number, 14, self.storage_location)
 				if self.repeating:
 						ws.update_cell(self.row_number, 12, "Y")
 
