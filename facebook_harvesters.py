@@ -1,9 +1,12 @@
 import subprocess
 import os
 
+agent_name = "facebook_harvesters_1"
+
 def get_video(item):
 	try:
 		url = item.url
+		item.agent_name = agent_name+"_get_video"
 		cwd = os.getcwd()
 		if not os.path.exists(item.storage_location):
 			os.makedirs(item.storage_location)
