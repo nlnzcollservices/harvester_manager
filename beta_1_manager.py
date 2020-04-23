@@ -50,6 +50,14 @@ storage_folder_root = "./harvests"
 if not os.path.exists(storage_folder_root):
 	os.makedirs(storage_folder_root) 
 
+### get local content types
+### if you don't have a file in the root folder called 'my_content_types.txt' nothing will process.
+### Use 'my_content_types_master.txt' as a refernce
+if not os.path.exists('my_content_types.txt'):
+	my_content_types = []
+else:
+	with open('my_content_types.txt') as data:
+		my_content_types = [x for x in data.read().split('\n') if x != ""]
 
 class Social_Media_Collector():
 		def __init__(self, data ,row_number):
@@ -99,26 +107,26 @@ class Social_Media_Collector():
 					self.data[18] = self.storage_folder
 					if self.ready == "Y" and self.collected != "Y":
 
-						if self.content_type == "InstagramAccount":
+						if self.content_type == "InstagramAccount" and self.content_type in my_content_types:
 							flag, self.location = insta_get_account()
-						if self.content_type == "InstagramLive":
+						elif self.content_type == "InstagramLive" and self.content_type in my_content_types:
 							flag, self.location = insta_get_live(self.link, self.storage_folder )
-						if self.content_type == "TiktokVideo":
+						elif self.content_type == "TiktokVideo" and self.content_type in my_content_types:
 							flag, self.location = get_tiktok_video(self.link, self.storage_folder )
-						if self.content_type == "FacebookVideo":
+						elif self.content_type == "FacebookVideo" and self.content_type in my_content_types:
 							flag, self.location = facebook_get_video(self.link, self.storage_folder)
 
 								# my_harvester = Youtube_harvester(self.data)
-								# if self.content_type == "InstagramItem":
+								# elif self.content_type == "InstagramItem" and self.content_type in my_content_types:
 								# 		flag, self.location = instagramm_item()
-								# if self.content_type == "VimeoVideo":
+								# elif self.content_type == "VimeoVideo" and self.content_type in my_content_types:
 								# 		flag, self.location = vimeo_video()
-								# if self.content_type == "YoutubeVideo":
+								# elif self.content_type == "YoutubeVideo" and self.content_type in my_content_types:
 								# 		flag, self.location = my_harvester.youtube_video()
-								# if self.content_type == "YoutubChannel":
+								# elif self.content_type == "YoutubChannel" and self.content_type in my_content_types:
 								# 		flag, self.location = my_harvester.youtube_channel()
 								
-							# if self.content_type == "YoutubeUser":
+								# elif self.content_type == "YoutubeUser":
 									# self.flag, self.location = my_harvester.youtube_user()
 						print(self.content_type, self.date_range, self.storage_folder)
 						if self.flag:
