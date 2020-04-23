@@ -10,7 +10,7 @@ import subprocess
 import configparser
 from insta_harvesters import get_live as insta_get_live
 from insta_harvesters import get_account as insta_get_account
-from tiktok_harvester import get_tiktok_video
+from tiktok_harvester import get_tiktok_video as tiktok_get_video 
 from facebook_harvesters import get_video as facebook_get_video
 
 harvester = "harvester v.2"
@@ -112,7 +112,7 @@ class Social_Media_Collector():
 						elif self.content_type == "InstagramLive" and self.content_type in my_content_types:
 							self.flag = insta_get_live(self.link, self.storage_folder )
 						elif self.content_type == "TiktokVideo" and self.content_type in my_content_types:
-							self.flag = get_tiktok_video(self.link, self.storage_folder )
+							self.flag = tiktok_get_video(self.link, self.storage_folder )
 						elif self.content_type == "FacebookVideo" and self.content_type in my_content_types:
 							self.flag = facebook_get_video(self.link, self.storage_folder)
 
