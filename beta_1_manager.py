@@ -10,8 +10,9 @@ import subprocess
 import configparser
 from insta_harvesters import get_live as insta_get_live
 from insta_harvesters import get_account as insta_get_account
-from tiktok_harvester import get_tiktok_video as tiktok_get_video 
+from tiktok_harvesters import get_tiktok_video as tiktok_get_video 
 from facebook_harvesters import get_video as facebook_get_video
+from youtube_harvesters import get_video as youtube_get_video
 
 harvester = "harvester v.2"
 # project_folder = "\\".join(os.getcwd().split('\\')[:-1])
