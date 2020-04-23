@@ -20,3 +20,12 @@ def get_tiktok_video(url, storage_location):
 	urllib.request.urlretrieve(parent.find("video")["src"], name)
 	os.chdir(cwd)
 	return True
+
+def test_func():
+	url = ""
+	storage_location = ""
+	get_tiktok_video(url, storage_location)
+
+if __name__ == '__main__':
+	test_func()
+
