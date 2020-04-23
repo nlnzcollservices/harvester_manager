@@ -44,7 +44,7 @@ c = gspread.authorize(creds)
 #gets spreadsheet
 gs = c.open_by_key(sprsh)
 #gets sheet by name
-ws = gs.worksheet("Collecting List")
+ws = gs.get_worksheet(0)
 
 ### make storage folder 
 storage_folder_root = "./harvests"
@@ -86,6 +86,7 @@ class Item():
 
 
 def item_parser(item):
+
 	if item.ready == "Y" and item.collected != "Y":
 		if item.content_type == "InstagramAccount" and item.content_type in my_content_types:
 			item = insta_get_account(item)
