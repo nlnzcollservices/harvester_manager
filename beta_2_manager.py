@@ -14,7 +14,6 @@ from tiktok_harvesters import get_tiktok_video as tiktok_get_video
 from facebook_harvesters import get_video as facebook_get_video
 # from youtube_harvesters import get_video as youtube_get_video
 
-harvester = "harvester v.2"
 # project_folder = "\\".join(os.getcwd().split('\\')[:-1])
 sys.path.insert(0, r'C:\Source\secrets_and_credentials')
 script_folder = os.getcwd()
@@ -31,6 +30,17 @@ try:
 	insta_password = config.get("configuration","insta_password")
 except configparser.NoOptionError:
 	pass
+
+
+try: 
+	twitter_consumer_key = config.get("configuration","twitter_consumer_key")
+	twitter_consumer_secret = config.get("configuration","twitter_consumer_secret")
+	twitter_access_token = config.get("configuration","twitter_access_token")
+	twitter_access_token_secret = config.get("configuration","twitter_access_token_secret")
+except configparser.NoOptionError:
+	pass
+
+
 
 credential_file = os.path.join(secrets_and_credentials_fold, "credentials")
 client_secrets_file = os.path.join(secrets_and_credentials_fold, "client_secrets.json")
