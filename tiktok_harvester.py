@@ -19,3 +19,4 @@ def get_tiktok_video(url, storage_location):
 	parent = bs(session.get(url).text, features="html5lib") 
 	urllib.request.urlretrieve(parent.find("video")["src"], name)
 	os.chdir(cwd)
+	return True

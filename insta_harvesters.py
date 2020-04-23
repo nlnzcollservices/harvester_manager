@@ -34,5 +34,4 @@ def get_account(url, storage_location):
 		return True, storage_location
 	except:
 		os.chdir(cwd)
-		return False, storage_location 
-
+		return False

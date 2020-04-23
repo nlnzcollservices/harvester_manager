@@ -21,7 +21,7 @@ def get_video(url, storage_location):
 				os.rename(src, dst)
 
 		os.chdir(cwd)
-		return True, storage_location
+		return True
 	except:
 		os.chdir(cwd)
-		return False, storage_location 
+		return False
