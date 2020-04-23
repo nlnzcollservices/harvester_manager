@@ -7,7 +7,9 @@ session = requests.Session()
 session.headers.update({'User-Agent': 'Custom user agent'})
 
 
-def get_tiktok_video(url, storage_location):
+def get_tiktok_video(item):
+	url = item.url
+	storage_location = item.storage_location
 	cwd = os.getcwd()
 	if not os.path.exists(storage_location):
 		os.makedirs(storage_location)
@@ -19,4 +21,5 @@ def get_tiktok_video(url, storage_location):
 	parent = bs(session.get(url).text, features="html5lib") 
 	urllib.request.urlretrieve(parent.find("video")["src"], name)
 	os.chdir(cwd)
-	return True
+	item.completed = True
+	return item

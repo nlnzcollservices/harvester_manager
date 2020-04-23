@@ -1,7 +1,9 @@
 import subprocess
 import os
 
-def get_live(url, storage_location):
+def get_live(item):
+	url = item.url
+	storage_location = item.storage_location
 	try:
 		cwd = os.getcwd()
 		if not os.path.exists(storage_location):
@@ -13,13 +15,15 @@ def get_live(url, storage_location):
 		command = ['pyinstalive', "-d", user_name ]
 		subprocess.call(command, shell=True)
 		os.chdir(cwd)
-		return True, storage_location
+		item.completed = True
 	except:
 		os.chdir(cwd)
-		return False, storage_location 
+		item.completed = False
+	return item
 
-
-def get_account(url, storage_location):
+def get_account(item):
+	url = item.url
+	storage_location = item.storage_location
 	try:
 		cwd = os.getcwd()
 		if not os.path.exists(storage_location):
@@ -31,7 +35,8 @@ def get_account(url, storage_location):
 		command = ["instagram-scraper", user_name, "-u", insta_username, "-p",  insta_password ]
 		subprocess.call(command, shell=True)
 		os.chdir(cwd)
-		return True, storage_location
+		item.completed = True
 	except:
 		os.chdir(cwd)
-		return False
+		item.completed = False
+	return item
