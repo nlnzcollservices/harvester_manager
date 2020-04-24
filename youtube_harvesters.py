@@ -16,6 +16,8 @@ from api import api_key
 
 youtube = build('youtube',"v3", developerKey=api_key)
 
+agent_name = "youtube_harvesters"
+
 def get_video(item):
 
 
@@ -28,6 +30,7 @@ def get_video(item):
 	"""
 
 	url = item.url
+	item.agent_name = agent_name+"_get_video"
 	storage_folder_root = item.storage_folder_root
 	try:
 		cwd = os.getcwd()
@@ -56,6 +59,7 @@ def get_channel(item):
 	"""
 
 	url = item.url
+	item.agent_name = agent_name+"_get_channel"
 	storage_folder_root = item.storage_folder_root
 	try:
 		cwd = os.getcwd()
@@ -98,17 +102,17 @@ def get_user(item):
 	location   - location of folder with downloaded materials
 
 	"""
+	
+	item.agent_name = agent_name+"_get_user"
 	try:
 		cwd = os.getcwd()
-		if not os.path.exists(storage_location):
-			os.makedirs(storage_location)
-		os.chdir(storage_location)
-		if url.endswith("/"):
-			url = url[:-1]
+		if not os.path.exists(item.storage_folder):
+			os.makedirs(item.storage_folder)
+		os.chdir(item.storage_folder)
 		link_list = []	
 		all_video_ids = []
 		driver=webdriver.Chrome()
-		driver.get(self.link)
+		driver.get(item.url)
 		offset = 0
 		driver.maximize_window()
 		max_window_height = driver.execute_script('return Math.max('
@@ -120,7 +124,7 @@ def get_user(item):
 		height = driver.execute_script('return Math.max(''document.documentElement.clientHeight, window.innerHeight);')
 		count= 0
 		offset = int(height)
-		for n in range(30):
+		for n in range(15):
 			count+=1
 			if count <15:
 				driver.execute_script('window.scrollTo(0, {});'.format(offset))
@@ -131,16 +135,18 @@ def get_user(item):
 				all_youtube_links = soup.findAll({"a":{"id":"video-title"}})
 				for el in all_youtube_links:
 					if "href" in el.attrs.keys() and "/watch?v=" in el.attrs["href"] and not "&" in el.attrs["href"]:
-						if not el.attrs["href"] in link_list:
+						if not el.attrs["href"] in all_video_ids:
 							all_video_ids += [el.attrs["href"].split("/watch?v=")[-1]]
+
 		if item.archived_start_date:
 			video_ids = filter_user_video_by_date(all_video_ids, item.archived_start_date)
 		else:
-			vide_ids = all_video_ids
-		video_collector(video_ids)
+			video_ids = all_video_ids
+		video_collector(video_ids, item.storage_folder, item.id)
 		os.chdir(cwd)
 		item.completed = True
-	except:
+	except Exception as e:
+		print(str(e))
 		os.chdir(cwd)
 		item.completed = False
 	return item
@@ -171,12 +177,11 @@ def filter_user_video_by_date(all_video_ids, archived_start_date):
 def get_ids_from_videos(videos):
 
 	"""Making list of video ids from channel from certain date"""
-
+	video_ids = []
 	for video in videos:
-		video_time_stamp = time.mktime(dt.strptime(video["snippet"]["publishedAt"],"%Y-%m-%dT%H:%M:%S.000Z").timetuple())
-		
-		if video_time_stamp > item.from_date_stamp:
-			self.video_ids += [video["snippet"]["resourceId"]["videoId"]]
+		video_time = datetime.parser(video["snippet"]["publishedAt"])
+		if video_time > item.archived_start_date:
+			video_ids += [video["snippet"]["resourceId"]["videoId"]]
 
 def get_video_comments(youtube, **kwargs):
 
@@ -204,18 +209,20 @@ def get_video_comments(youtube, **kwargs):
 		
 
 
-def video_collector(video_ids):
+def video_collector(video_ids, storage_folder ,id):
 
 	""" 
 	Rounting the collecting process
 		Returns:
 
 	"""
-	ydl = youtube_dl.YoutubeDL({'outtmpl':os.path.join(project_folder,str(ui),"files",'%(id)s.%(ext)s')})
+	print(storage_folder)
+	storage_folder = "."
+	ydl = youtube_dl.YoutubeDL({'outtmpl':os.path.join(storage_folder,"files",'%(id)s.%(ext)s')})
 	json_data = []
 	comments_data = []
 	flag = True
-	for vidid in self.video_ids:
+	for vidid in video_ids:
 		url = "https://www.youtube.com/watch?v="+vidid
 		try:
 			res = youtube.videos().list(id = vidid, part = "snippet").execute()
@@ -228,21 +235,21 @@ def video_collector(video_ids):
 		except Exception as e:
 			print(str(e))
 			print(vidid)
-			with open(os.path.join(ui_folder,'errors_{}.txt'.dt.now().strftime('%Y%m%d')), "a") as f:
-				f.write(vidid + "|" + ui + " " + str(e) )
+			with open(os.path.join(storage_folder,'errors_{}.txt'.format(dt.now().strftime('%Y%m%d'))), "a") as f:
+				f.write(vidid + "|" + id + " " + str(e) )
 				f.write("\n")
 		try:
 			ydl.download([url])	
 		except Exception as e:
 			print(str(e))
 			print(vidid)
-			with open(os.path.join(ui_folder,'errors_{}.txt'.dt.now().strftime('%Y%m%d')), "a") as f:
-				f.write(vidid + "|" + ui + " " + str(e) )
+			with open(os.path.join(storage_folder,'errors_{}.txt'.format(dt.now().strftime('%Y%m%d'))), "a") as f:
+				f.write(vidid + "|" + id + " " + str(e) )
 				f.write("\n")
 				flag = False					
-	with open(os.path.join(ui_folder, str(ui)+'.json'), 'a') as json_file:
+	with open(os.path.join(storage_folder, str(id)+'.json'), 'a') as json_file:
 		json.dump(json_data, json_file)
-	with open(os.path.join(ui_folder, str(ui)+'_comments.json'), 'a') as json_file:
+	with open(os.path.join(storage_folder, str(id)+'_comments.json'), 'a') as json_file:
 		json.dump(comments_data, json_file)
 	
 
