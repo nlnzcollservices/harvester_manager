@@ -5,82 +5,67 @@ import os
 import time
 import requests
 import youtube_dl
+import dateparser
+import sys
 from bs4 import BeautifulSoup as bs
 from selenium import webdriver
 from apiclient.discovery import build
 from datetime import datetime as dt
+sys.path.insert(0, r'C:\Source\secrets_and_credentials')
 from api import api_key
 
 youtube = build('youtube',"v3", developerKey=api_key)
 
-class Youtube_harvester():
-
-	def __init__(self, data):
-
-		"""
-		Manages youtube harvesting processes
-
-		Arguments:
-		    data (list) - a row from google spreadsheet
-
-		Return:
-			location (str) - storage location
-			flag (bool) - True if successful otherwise False
-
-		"""
-		self.data = data
-		self.ui = self.data[0]
-		self.description = self.data[1]
-		self.creator = self.data[2]
-		self.ready = self.data[3]
-		self.category = self.data[4]
-		self.location = self.data[5]
-		self.content_type = self.data[6]
-		self.link = self.data[7]
-		self.date_range = self.data[8]
-		self.recurring = self.data[9]
-		self.sccope = self.data[10]
-		self.archived = self.data[11]
-		self.collected = self.data[12]
-		self.responsible	= self.data[13]
-		self.storage_location = self.data[14]
-		self.notes = self.data[15]
-		self.repeating = self.data[16]
-		self.row_number = self.data[17]
-		self.project_folder = self.data[18]
-		self.ui_folder = os.path.join(self.project_folder, self.ui)
-		self.file_folder = os.path.join(self.ui_folder, "files")
-		if not os.path.isdir(self.project_folder):
-			os.mkdir(self.project_folder)
-		self.video_ids = []
-		self.start_time = dt.strptime("19900101","%Y%m%d").strftime('%Y-%m-%dT%H:%M:%SZ')
-		if self.repeating:
-			self.start_time = dt.strptime(self.date_range.split("onward")[0].rstrip(" "),"%d.%m.%Y").strftime('%Y-%m-%dT%H:%M:%SZ')
-			if self.archived != "":
-				self.start_time = dt.strptime(self.archived,"%d.%m.%Y").strftime('%Y-%m-%dT%H:%M:%SZ')
-		print(self.start_time)
-		self.from_date_stamp = time.mktime(dt.strptime(self.start_time,"%Y-%m-%dT%H:%M:%SZ").timetuple())
+def get_video(item):
 
 
-	def youtube_video(self):
+	"""
+	Managing collecting of single video
+	Arguments:
+		item (obj) - contains row data from spreadsheet
+	Returns:
+		item (obj) - contains row data from spreadsheet with "completed" set True or False
+	"""
 
-		"""
-		Managing collecting of single video
-		Returns:
-			flag(bool) - true if successful
-			location   - location of folder with downloaded materials
-		"""
+	url = item.url
+	storage_folder_root = item.storage_folder_root
+	try:
+		cwd = os.getcwd()
+		if not os.path.exists(storage_folder_root):
+			os.makedirs(storage_folder_root)
+		os.chdir(storage_folder_root)
+		if url.endswith("/"):
+			url = url[:-1]
+		video_ids= [link.split('?v=')[-1].split("&")[0]]
+		video_collector(video_ids)
+		os.chdir(cwd)
+		item.completed = True
+	except:
+		os.chdir(cwd)
+		item.completed = False
+	return item
 
-		
-		self.video_ids= [link.split('?v=')[-1].split("&")[0]]
-		self.video_collector()
-		return(slef.flag, self.ui_folder)
+def get_channel(item):
 
-	def youtube_channel(self):
+	"""
+	Getting video ids from channel
+	Arguments:
+		item (obj) - contains row data from spreadsheet
+	Returns:
+		item (obj) - contains row data from spreadsheet with "completed" set True or False
+	"""
 
-		"""Getting video ids from channel"""
+	url = item.url
+	storage_folder_root = item.storage_folder_root
+	try:
+		cwd = os.getcwd()
+		if not os.path.exists(storage_folder_root):
+			os.makedirs(storage_folder_root)
+		os.chdir(storage_folder_root)
+		if url.endswith("/"):
+			url = url[:-1]
 
-		self.channel_id = link.split("channel/")[-1].split("/")[0]
+		channel_id = link.split("channel/")[-1].split("/")[0]
 		req = youtube.channels().list(id = self.channel_id, part = 'contentDetails')
 		result = req.execute()
 		playlist = result["items"][0]["contentDetails"]["relatedPlaylists"]["uploads"]
@@ -89,27 +74,37 @@ class Youtube_harvester():
 		while 1:
 			res = youtube.playlistItems().list(playlistId= playlist, part="snippet", maxResults=50 , pageToken=next_page_token).execute()
 			videos += res["items"]
-			print(res.keys())
 			try:
 				next_page_token = res["nextPageToken"]
 			except:
 				next_page_token = None
 			if next_page_token is None:
 				break
-		self.videos = videos
-		get_ids_from_videos()
-		self.video_collector()
-		return flag, self.ui_folder
+		video_ids = get_ids_from_videos(videos)
+		video_collector(video_ids)
+		os.chdir(cwd)
+		item.completed = True
+	except:
+		os.chdir(cwd)
+		item.completed = False
+	return item
 
-	def youtube_user(self):
+def get_user(item):
 
-		"""
-		Collects video ids from youtube user, pass them for downloading and returns flag and location
-		Returns:
-		flag(bool) - true if successful
-		location   - location of folder with downloaded materials
+	"""
+	Collects video ids from youtube user, pass them for downloading and returns flag and location
+	Returns:
+	flag(bool) - true if successful
+	location   - location of folder with downloaded materials
 
-		"""
+	"""
+	try:
+		cwd = os.getcwd()
+		if not os.path.exists(storage_location):
+			os.makedirs(storage_location)
+		os.chdir(storage_location)
+		if url.endswith("/"):
+			url = url[:-1]
 		link_list = []	
 		all_video_ids = []
 		driver=webdriver.Chrome()
@@ -127,7 +122,7 @@ class Youtube_harvester():
 		offset = int(height)
 		for n in range(30):
 			count+=1
-			if count <20:
+			if count <15:
 				driver.execute_script('window.scrollTo(0, {});'.format(offset))
 				time.sleep(1)
 				offset+=height
@@ -138,105 +133,132 @@ class Youtube_harvester():
 					if "href" in el.attrs.keys() and "/watch?v=" in el.attrs["href"] and not "&" in el.attrs["href"]:
 						if not el.attrs["href"] in link_list:
 							all_video_ids += [el.attrs["href"].split("/watch?v=")[-1]]
-		self.all_video_ids = all_video_ids
-		self.filter_user_video_by_date()
-		self.video_collector()
-		return self.flag, self.ui_folder
+		if item.archived_start_date:
+			video_ids = filter_user_video_by_date(all_video_ids, item.archived_start_date)
+		else:
+			vide_ids = all_video_ids
+		video_collector(video_ids)
+		os.chdir(cwd)
+		item.completed = True
+	except:
+		os.chdir(cwd)
+		item.completed = False
+	return item
 
-	def filter_user_video_by_date(self):
+def filter_user_video_by_date(all_video_ids, archived_start_date):
+	"""
+		Creating list of videos published after archived_start_date
+	Args:
+		all_video_ids (lst) - users all video ids
+		archived_start_date (dateparser(obj)) - 
+	"""
 
-		for vidid in self.all_video_ids:
-			try:
-				res = youtube.videos().list(id = vidid, part = "snippet").execute()
-			except:
-				youtube = build('youtube',"v3", developerKey=api_key)
-				res = youtube.videos().list(id = vidid, part = "snippet").execute()
-			published_at = res["items"][0]["snippet"]["publishedAt"]
-			try:
-				published_at_timestamp = time.mktime(dt.strptime(published_at,"%Y-%m-%dT%H:%M:%S.000Z").timetuple())
-			except:
-				published_at_timestamp = time.mktime(dt.strptime(published_at,"%Y-%m-%dT%H:%M:%SZ").timetuple())
+
+	video_ids = []
+	for vidid in all_video_ids:
+		try:
+			res = youtube.videos().list(id = vidid, part = "snippet").execute()
+		except:
+			youtube = build('youtube',"v3", developerKey=api_key)
+			res = youtube.videos().list(id = vidid, part = "snippet").execute()
+		published_at =  dateparser.parse(res["items"][0]["snippet"]["publishedAt"])
 			
-			if published_at_timestamp > self.from_date_stamp:
-				self.video_ids += vidid
+		if published_at > archived_start_date:
+			video_ids += vidid
+	return(video_ids)
 
 
-	def get_ids_from_videos(self):
+def get_ids_from_videos(videos):
 
-		"""Making list of video ids from channel from certain date"""
+	"""Making list of video ids from channel from certain date"""
 
-		for video in self.videos:
-			video_time_stamp = time.mktime(dt.strptime(video["snippet"]["publishedAt"],"%Y-%m-%dT%H:%M:%S.000Z").timetuple())
-			
-			if video_time_stamp > self.from_date_stamp:
-				self.video_ids += [video["snippet"]["resourceId"]["videoId"]]
+	for video in videos:
+		video_time_stamp = time.mktime(dt.strptime(video["snippet"]["publishedAt"],"%Y-%m-%dT%H:%M:%S.000Z").timetuple())
+		
+		if video_time_stamp > item.from_date_stamp:
+			self.video_ids += [video["snippet"]["resourceId"]["videoId"]]
 
-	def get_video_comments(youtube, **kwargs):
+def get_video_comments(youtube, **kwargs):
 
-		"""Collects comments info by video id
-		Args:
-			kwargs (parameters )
-		Return:
-			comments (list) - comments thread in json format
-		"""
-		self.comments = []
-		results = youtube.commentThreads().list(**kwargs).execute()
+	"""Collects comments info by video id
+	Args:
+		kwargs (parameters )
+	Return:
+		comments (list) - comments thread in json format
+	"""
+	comments = []
+	results = youtube.commentThreads().list(**kwargs).execute()
 
-		while results:
-			for item in results['items']:
-				comment = item['snippet']['topLevelComment']['snippet']#['textDisplay']
-				comments.append(comment)
+	while results:
+		for item in results['items']:
+			comment = item['snippet']['topLevelComment']['snippet']#['textDisplay']
+			comments.append(comment)
 
-			if 'nextPageToken' in results:
-				kwargs['pageToken'] = results['nextPageToken']
-				results = youtube.commentThreads().list(**kwargs).execute()
-			else:
-				break
+		if 'nextPageToken' in results:
+			kwargs['pageToken'] = results['nextPageToken']
+			results = youtube.commentThreads().list(**kwargs).execute()
+		else:
+			break
+	return comments
 
-		self.comments= comments
+		
 
 
-	def video_collector(self):
+def video_collector(video_ids):
 
-			""" 
-			Rounting the collecting process
-				Returns:
+	""" 
+	Rounting the collecting process
+		Returns:
 
-			"""
-			ydl = youtube_dl.YoutubeDL({'outtmpl':os.path.join(project_folder,str(ui),"files",'%(id)s.%(ext)s')})
-			json_data = []
-			comments_data = []
-			flag = True
-			for vidid in self.video_ids:
-				url = "https://www.youtube.com/watch?v="+vidid
-				try:
-					res = youtube.videos().list(id = vidid, part = "snippet").execute()
-				except Exception as e:
-					youtube = build('youtube',"v3", developerKey=api_key)
-					res = youtube.videos().list(id = vidid, part = "snippet").execute()
-				json_data.append(res)
-				try:
-					comments_data.append(get_video_comments(youtube, part='snippet', videoId=vidid))
-				except Exception as e:
-					print(str(e))
-					print(vidid)
-					with open(os.path.join(ui_folder,'errors_{}.txt'.dt.now().strftime('%Y%m%d')), "a") as f:
-						f.write(vidid + "|" + ui + " " + str(e) )
-						f.write("\n")
-				try:
-					ydl.download([url])	
-				except Exception as e:
-					print(str(e))
-					print(vidid)
-					with open(os.path.join(ui_folder,'errors_{}.txt'.dt.now().strftime('%Y%m%d')), "a") as f:
-						f.write(vidid + "|" + ui + " " + str(e) )
-						f.write("\n")
-						flag = False					
-			with open(os.path.join(ui_folder, str(ui)+'.json'), 'a') as json_file:
-				json.dump(json_data, json_file)
-			with open(os.path.join(ui_folder, str(ui)+'_comments.json'), 'a') as json_file:
-				json.dump(comments_data, json_file)
-			self.flag = flag
+	"""
+	ydl = youtube_dl.YoutubeDL({'outtmpl':os.path.join(project_folder,str(ui),"files",'%(id)s.%(ext)s')})
+	json_data = []
+	comments_data = []
+	flag = True
+	for vidid in self.video_ids:
+		url = "https://www.youtube.com/watch?v="+vidid
+		try:
+			res = youtube.videos().list(id = vidid, part = "snippet").execute()
+		except Exception as e:
+			youtube = build('youtube',"v3", developerKey=api_key)
+			res = youtube.videos().list(id = vidid, part = "snippet").execute()
+		json_data.append(res)
+		try:
+			comments_data.append(get_video_comments(youtube, part='snippet', videoId=vidid))
+		except Exception as e:
+			print(str(e))
+			print(vidid)
+			with open(os.path.join(ui_folder,'errors_{}.txt'.dt.now().strftime('%Y%m%d')), "a") as f:
+				f.write(vidid + "|" + ui + " " + str(e) )
+				f.write("\n")
+		try:
+			ydl.download([url])	
+		except Exception as e:
+			print(str(e))
+			print(vidid)
+			with open(os.path.join(ui_folder,'errors_{}.txt'.dt.now().strftime('%Y%m%d')), "a") as f:
+				f.write(vidid + "|" + ui + " " + str(e) )
+				f.write("\n")
+				flag = False					
+	with open(os.path.join(ui_folder, str(ui)+'.json'), 'a') as json_file:
+		json.dump(json_data, json_file)
+	with open(os.path.join(ui_folder, str(ui)+'_comments.json'), 'a') as json_file:
+		json.dump(comments_data, json_file)
+	
 
-			
+def main():
+	pass
+	# item = {
+	# 	"url":"https://twitter.com/ndha_nz",
+	# 	"storage_folder":"./junk",
+	# 	"date_range":"01.03.2020"
+	# 	}
+
+	# print (item)
+	# get_account(item)
+	# # get_tweet(item)
+
+
+if __name__ == '__main__':
+	main()	
 
