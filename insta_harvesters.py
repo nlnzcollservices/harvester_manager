@@ -1,7 +1,20 @@
 import subprocess
 import os
+import configparser
 
 agent_name = "insta_harvesters_1"
+
+config = configparser.ConfigParser()
+sprsh_file = r"C:\Source\secrets_and_credentials\spreadsheet"
+config.read(sprsh_file)
+
+try:
+	insta_username = config.get("configuration","insta_user_name")
+	insta_password = config.get("configuration","insta_password")
+except configparser.NoOptionError:
+	pass
+
+
 
 def get_live(item):
 	url = item.url
