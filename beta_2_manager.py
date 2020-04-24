@@ -94,7 +94,13 @@ class Item():
 		self.row_number = row_number
 		self.agent_name = ""
 		self.archived_start_date = ""
-
+		if self.reccuring == "Y":
+			if self.archived == None:
+				self.archived_start_date = self.date_range
+			else:
+				self.archived_start_date = self.archived
+		if self.reccuring == "N":
+			self.archived_start_date = self.date_range
 
 
 
