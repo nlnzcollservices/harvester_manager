@@ -12,7 +12,7 @@ from insta_harvesters import get_live as insta_get_live
 from insta_harvesters import get_account as insta_get_account
 from tiktok_harvesters import get_tiktok_video as tiktok_get_video 
 from facebook_harvesters import get_video as facebook_get_video
-# from youtube_harvesters import get_video as youtube_get_video
+from youtube_harvesters import get_video as youtube_get_video
 
 # project_folder = "\\".join(os.getcwd().split('\\')[:-1])
 sys.path.insert(0, r'C:\Source\secrets_and_credentials')
@@ -93,6 +93,15 @@ class Item():
 		self.storage_folder = os.path.join(storage_folder_root, self.id)
 		self.row_number = row_number
 		self.agent_name = ""
+		self.archived_start_date = ""
+		if self.reccuring == "Y":
+			if self.archived == None:
+				self.archived_start_date = self.date_range
+			else:
+				self.archived_start_date = self.archived
+		if self.reccuring == "N":
+			self.archived_start_date = self.date_range
+
 
 
 def item_parser(item):
