@@ -7,6 +7,7 @@ import urllib
 import dateparser
 from datetime import datetime, timedelta
 from email.utils import parsedate_tz
+import configparser
 
 config = configparser.ConfigParser()
 sprsh_file = r"C:\Source\secrets_and_credentials\spreadsheet"
