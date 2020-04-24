@@ -6,6 +6,7 @@ agent_name = "facebook_harvesters_1"
 def get_video(item):
 	try:
 		url = item.url
+		storage_location = item.storage_location
 		item.agent_name = agent_name+"_get_video"
 		cwd = os.getcwd()
 		if not os.path.exists(item.storage_location):
@@ -18,10 +19,10 @@ def get_video(item):
 		command = ['fbdown', url]
 		subprocess.call(command, shell=True)
 
-		for f in os.listdir(item.storage_location):
+		for f in os.listdir(storage_location):
 			if not f.endswith(".mp4"):
-				src = os.path.join(item.storage_location, f)
-				dst = os.path.join(item.storage_location, f+".mp4")
+				src = os.path.join(storage_location, f)
+				dst = os.path.join(storage_location, f+".mp4")
 				os.rename(src, dst)
 
 		os.chdir(cwd)

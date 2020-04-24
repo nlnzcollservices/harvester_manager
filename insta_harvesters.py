@@ -1,9 +1,12 @@
 import subprocess
 import os
 
+agent_name = "insta_harvesters_1"
+
 def get_live(item):
 	url = item.url
 	storage_location = item.storage_location
+	item.agent_name = agent_name+"-get_live"
 	try:
 		cwd = os.getcwd()
 		if not os.path.exists(storage_location):
@@ -24,6 +27,7 @@ def get_live(item):
 def get_account(item):
 	url = item.url
 	storage_location = item.storage_location
+	item.agent_name = agent_name+"-get_account"
 	try:
 		cwd = os.getcwd()
 		if not os.path.exists(storage_location):
