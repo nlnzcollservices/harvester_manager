@@ -12,6 +12,8 @@ from insta_harvesters import get_live as insta_get_live
 from insta_harvesters import get_account as insta_get_account
 from tiktok_harvesters import get_tiktok_video as tiktok_get_video 
 from facebook_harvesters import get_video as facebook_get_video
+from twitter_harvesters import get_tweet as twitter_get_tweet
+from twitter_harvesters import get_account as twitter_get_account
 #from youtube_harvesters import get_video as youtube_get_video
 
 # project_folder = "\\".join(os.getcwd().split('\\')[:-1])
@@ -24,21 +26,6 @@ config.read(sprsh_file)
 
 ## credentials
 sprsh = config.get("configuration","sprsh")
-
-try:
-	insta_username = config.get("configuration","insta_user_name")
-	insta_password = config.get("configuration","insta_password")
-except configparser.NoOptionError:
-	pass
-
-
-try: 
-	twitter_consumer_key = config.get("configuration","twitter_consumer_key")
-	twitter_consumer_secret = config.get("configuration","twitter_consumer_secret")
-	twitter_access_token = config.get("configuration","twitter_access_token")
-	twitter_access_token_secret = config.get("configuration","twitter_access_token_secret")
-except configparser.NoOptionError:
-	pass
 
 
 
@@ -81,7 +68,10 @@ class Item():
 		self.location = row[5]
 		self.content_type = row[6]
 		self.url = row[7]
-		self.date_range = dateparser.parse(row[8])
+		if row[8] == "NA":
+			self.date_range = None 
+		else:
+			self.date_range = dateparser.parse(row[8])
 		self.reccuring = row[9]
 		self.scope = row[10]
 		self.archived = dateparser.parse(row[11])
@@ -114,7 +104,14 @@ def item_parser(item):
 		elif item.content_type == "TiktokVideo" and item.content_type in my_content_types:
 			item = tiktok_get_video(item)
 		elif item.content_type == "FacebookVideo" and item.content_type in my_content_types:
+			print (f"working on: {item.id} - {item.content_type}")
 			item = facebook_get_video(item)
+		elif item.content_type == "TwitterTweet" and item.content_type in my_content_types:
+			print (f"working on: {item.id} - {item.content_type}")
+			item = twitter_get_tweet(item)
+		elif item.content_type == "TwitterAccount" and item.content_type in my_content_types:
+			print (f"working on: {item.id} - {item.content_type}")
+			item = twitter_get_account(item)
 
 		# my_harvester = Youtube_harvester(self.data)
 		# elif self.content_type == "InstagramItem" and self.content_type in my_content_types:
@@ -138,14 +135,13 @@ def write_to_spreadsheet(item):
 	Writes to spreadsheet collect, responsible, storage location
 
 	"""
-	ws.update_cell(item.row_number, 11, dt.now().stftime("%d.%m.%Y") )
-	ws.update_cell(item.row_number, 13, item.agent_name)
-	ws.update_cell(item.row_number, 14, item.storage_location)
-	
-	if not item.recurring:
-		ws.update_cell(self.row_number, 12, "Y")
+	ws.update_cell(item.row_number, 12, dt.now().strftime("%d.%m.%Y") )
+	if not item.reccuring:
+		ws.update_cell(item.row_number, 13, "N")
 	else:
-		ws.update_cell(self.row_number, 12, "N")
+		ws.update_cell(item.row_number, 13, "Y")
+	ws.update_cell(item.row_number, 14, item.agent_name)
+	ws.update_cell(item.row_number, 15, item.storage_folder)
 
 def main():
 
