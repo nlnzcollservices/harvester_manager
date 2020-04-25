@@ -17,6 +17,7 @@ from twitter_harvesters import get_account as twitter_get_account
 from youtube_harvesters import get_video as youtube_get_video
 from youtube_harvesters import get_channel as youtube_get_channel
 from youtube_harvesters import get_user as youtube_get_user
+from youtube_harvesters import get_playlist as youtube_get_playlist
 
 # project_folder = "\\".join(os.getcwd().split('\\')[:-1])
 sys.path.insert(0, r'C:\Source\secrets_and_credentials')
@@ -123,9 +124,13 @@ def item_parser(item):
 		elif item.content_type == "YoutubeVideo" and item.content_type in my_content_types:
 			item = youtube_get_video(item)
 		elif item.content_type == "YoutubeChannel" and item.content_type in my_content_types:
-		 	item = youtube_get_channel(item)
+			item = youtube_get_channel(item)
 		elif item.content_type == "YoutubeUser" and item.content_type in my_content_types:
 			item = youtube_get_user(item)
+		elif item.content_type == "YoutubePlaylist" and item.content_type in my_content_types:
+			item = youtube_get_playlist(item)
+	
+			
 		#print(self.content_type, self.date_range, self.storage_folder)
 		if item.completed:
 			write_to_spreadsheet(item)
