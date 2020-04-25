@@ -14,7 +14,9 @@ from tiktok_harvesters import get_tiktok_video as tiktok_get_video
 from facebook_harvesters import get_video as facebook_get_video
 from twitter_harvesters import get_tweet as twitter_get_tweet
 from twitter_harvesters import get_account as twitter_get_account
-#from youtube_harvesters import get_video as youtube_get_video
+from youtube_harvesters import get_video as youtube_get_video
+from youtube_harvesters import get_channel as youtube_get_channel
+from youtube_harvesters import get_user as youtube_get_user
 
 # project_folder = "\\".join(os.getcwd().split('\\')[:-1])
 sys.path.insert(0, r'C:\Source\secrets_and_credentials')
@@ -118,13 +120,12 @@ def item_parser(item):
 		# 		flag, self.location = instagramm_item()
 		# elif self.content_type == "VimeoVideo" and self.content_type in my_content_types:
 		# 		flag, self.location = vimeo_video()
-		# elif self.content_type == "YoutubeVideo" and self.content_type in my_content_types:
-		# 		flag, self.location = my_harvester.youtube_video()
-		# elif self.content_type == "YoutubChannel" and self.content_type in my_content_types:
-		# 		flag, self.location = my_harvester.youtube_channel()
-				
+		elif self.content_type == "YoutubeVideo" and item.content_type in my_content_types:
+		 	item = youtube_get_video(item)
+		elif self.content_type == "YoutubChannel" and item.content_type in my_content_types:
+		 	item = youtube_get_channel(item)
 		elif item.content_type == "YoutubeUser" and item.content_type in my_content_types:
-			item = my_harvester.youtube_user(item)
+			item = youtube_get_user(item)
 		#print(self.content_type, self.date_range, self.storage_folder)
 		if item.completed:
 			write_to_spreadsheet(item)
