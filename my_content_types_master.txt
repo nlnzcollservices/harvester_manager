@@ -6,7 +6,7 @@ TiktokVideo
 Tweet
 TwitterAccount
 VimeoVideo
-YoutubeChannel
+YoutubePlaylistYoutubeChannel
 YoutubeUser
 YoutubeVideo
 TwitchVideo
