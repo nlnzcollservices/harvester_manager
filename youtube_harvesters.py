@@ -124,9 +124,10 @@ def get_user(item):
 		height = driver.execute_script('return Math.max(''document.documentElement.clientHeight, window.innerHeight);')
 		count= 0
 		offset = int(height)
-		for n in range(15):
+		all_video_ids = []
+		for n in range(10):
 			count+=1
-			if count <15:
+			if count <10:
 				driver.execute_script('window.scrollTo(0, {});'.format(offset))
 				time.sleep(1)
 				offset+=height
@@ -135,9 +136,10 @@ def get_user(item):
 				all_youtube_links = soup.findAll({"a":{"id":"video-title"}})
 				for el in all_youtube_links:
 					if "href" in el.attrs.keys() and "/watch?v=" in el.attrs["href"] and not "&" in el.attrs["href"]:
-						if not el.attrs["href"] in all_video_ids:
+						if not el.attrs["href"].split("/watch?v=")[-1] in all_video_ids:
 							all_video_ids += [el.attrs["href"].split("/watch?v=")[-1]]
-
+		all_video_ids = list(set(all_video_ids))
+		driver.close()
 		if item.archived_start_date:
 			video_ids = filter_user_video_by_date(all_video_ids, item.archived_start_date)
 		else:
