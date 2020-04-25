@@ -137,7 +137,7 @@ def write_to_spreadsheet(item):
 
 	"""
 	ws.update_cell(item.row_number, 12, dt.now().strftime("%d.%m.%Y") )
-	if not item.reccuring:
+	if item.reccuring == "N":
 		ws.update_cell(item.row_number, 13, "Y")
 	else:
 		ws.update_cell(item.row_number, 13, "N")
