@@ -121,7 +121,7 @@ def item_parser(item):
 		# elif self.content_type == "VimeoVideo" and self.content_type in my_content_types:
 		# 		flag, self.location = vimeo_video()
 		elif item.content_type == "YoutubeVideo" and item.content_type in my_content_types:
-		 	item = youtube_get_video(item)
+			item = youtube_get_video(item)
 		elif item.content_type == "YoutubChannel" and item.content_type in my_content_types:
 		 	item = youtube_get_channel(item)
 		elif item.content_type == "YoutubeUser" and item.content_type in my_content_types:
