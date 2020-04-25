@@ -138,9 +138,9 @@ def write_to_spreadsheet(item):
 	"""
 	ws.update_cell(item.row_number, 12, dt.now().strftime("%d.%m.%Y") )
 	if not item.reccuring:
-		ws.update_cell(item.row_number, 13, "N")
-	else:
 		ws.update_cell(item.row_number, 13, "Y")
+	else:
+		ws.update_cell(item.row_number, 13, "N")
 	ws.update_cell(item.row_number, 14, item.agent_name)
 	ws.update_cell(item.row_number, 15, item.storage_folder)
 
