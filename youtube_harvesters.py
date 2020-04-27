@@ -125,7 +125,7 @@ def get_playlist(item):
 			if next_page_token is None:
 				break
 		video_ids = get_ids_from_videos(videos, item.archived_start_date)
-		print(video_ids)
+		#print(video_ids)
 		flag = video_collector(video_ids, storage_folder, item.id)
 		os.chdir(cwd)
 		item.completed = flag
@@ -139,9 +139,11 @@ def get_user(item):
 
 	"""
 	Collects video ids from youtube user, pass them for downloading and returns flag and location
+	Arguments:
+		item (obj) - contains row data from spreadsheet
 	Returns:
-	flag(bool) - true if successful
-	location   - location of folder with downloaded materials
+		item (obj) - contains row data from spreadsheet with "completed" set True or False
+
 
 	"""
 	
@@ -200,7 +202,10 @@ def filter_user_video_by_date(all_video_ids, archived_start_date):
 		Creating list of videos published after archived_start_date
 	Args:
 		all_video_ids (lst) - users all video ids
-		archived_start_date (dateparser(obj)) - 
+		archived_start_date (datetime(obj)) -  date where to start collection
+	Returns:
+		video_ids (list) - contains all individual video ids to collect
+
 	"""
 
 
@@ -220,19 +225,26 @@ def filter_user_video_by_date(all_video_ids, archived_start_date):
 
 def get_ids_from_videos(videos, archived_start_date):
 
-	"""Making list of video ids from channel from certain date"""
+	"""
+
+	Making list of video ids from channel from certain date
+	Arguments:
+		videos (json) - individual video information		
+		archived_start_date (datetime(obj)) -  date where to start collection
+	Returns:
+		video_ids (list) - contains all individual video ids to collect
+
+	"""
 	video_ids = []
 	for video in videos:
-		print(video["snippet"]["publishedAt"])
 		video_time = dateparser.parse(video["snippet"]["publishedAt"])
-		print(archived_start_date)
-		print(video_time)
 		try:
 			print(video_time > archived_start_date)
 		except Exception as e:
 			try:
 				video_time=dateparser.parse(video_time.strftime('%Y-%m-%d %H:%M:%S'))
 			except Exception as e:
+				print(str(e))
 		if archived_start_date == None or video_time > archived_start_date:
 			video_ids += [video["snippet"]["resourceId"]["videoId"]]
 	return video_ids
@@ -270,11 +282,17 @@ def get_video_comments(youtube, **kwargs):
 def video_collector(video_ids, storage_folder ,id):
 
 	""" 
-	Rounting the collecting process
-		Returns:
+	Collects videos, video infromation, comments information and writes it to json files. Writes errors to error file.
+	Arguments:
+		video_ids(list) - list of video_ids to collect
+		storage_folder(str) - location of folder where to collect
+		id(str) - unique identifier
+	Returns:
+		flag (bool) - true if everything collected, false if any error
+
 
 	"""
-	print(storage_folder)
+
 	storage_folder = "."
 	ydl = youtube_dl.YoutubeDL({'outtmpl':os.path.join(storage_folder,"files",'%(id)s.%(ext)s')})
 	json_data = []
