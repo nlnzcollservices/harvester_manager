@@ -58,7 +58,6 @@ def get_channel(item):
 		item (obj) - contains row data from spreadsheet with "completed" set True or False
 	"""
 	print(item.id)
-	print("here000")
 	url = item.url
 	item.agent_name = agent_name+"_get_channel"
 	storage_folder = item.storage_folder
@@ -224,24 +223,17 @@ def get_ids_from_videos(videos, archived_start_date):
 	"""Making list of video ids from channel from certain date"""
 	video_ids = []
 	for video in videos:
-		print('here66')
 		print(video["snippet"]["publishedAt"])
 		video_time = dateparser.parse(video["snippet"]["publishedAt"])
-		print('here666')
 		print(archived_start_date)
 		print(video_time)
 		try:
 			print(video_time > archived_start_date)
 		except Exception as e:
-			print(str(e))
 			try:
 				video_time=dateparser.parse(video_time.strftime('%Y-%m-%d %H:%M:%S'))
 			except Exception as e:
-				print(str(e))
-		print(video_time)
-		print(archived_start_date)
 		if archived_start_date == None or video_time > archived_start_date:
-			print("here 6666")
 			video_ids += [video["snippet"]["resourceId"]["videoId"]]
 	return video_ids
 
@@ -322,15 +314,7 @@ def video_collector(video_ids, storage_folder ,id):
 
 def main():
 	pass
-	# item = {
-	# 	"url":"https://twitter.com/ndha_nz",
-	# 	"storage_folder":"./junk",
-	# 	"date_range":"01.03.2020"
-	# 	}
 
-	# print (item)
-	# get_account(item)
-	# # get_tweet(item)
 
 
 if __name__ == '__main__':
