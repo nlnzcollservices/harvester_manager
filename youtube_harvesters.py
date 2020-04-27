@@ -58,6 +58,7 @@ def get_channel(item):
 		item (obj) - contains row data from spreadsheet with "completed" set True or False
 	"""
 	print(item.id)
+	print("here000")
 	url = item.url
 	item.agent_name = agent_name+"_get_channel"
 	storage_folder = item.storage_folder
@@ -112,16 +113,11 @@ def get_playlist(item):
 		os.chdir(storage_folder)
 		if url.endswith("/"):
 			url = url[:-1]
-		print("here0")
 		playlist_id = url.split("?list=")[-1].split("/")[0]
-		print('here1')
 		videos = []
 		next_page_token = None
-		print("here2")
 		while 1:
-			print('here3')
 			res = youtube.playlistItems().list(playlistId= playlist_id, part="snippet", maxResults=50 , pageToken=next_page_token).execute()
-			print('here4')
 			videos += res["items"]
 			try:
 				next_page_token = res["nextPageToken"]
@@ -131,7 +127,6 @@ def get_playlist(item):
 				break
 		video_ids = get_ids_from_videos(videos, item.archived_start_date)
 		print(video_ids)
-		print("here3")
 		flag = video_collector(video_ids, storage_folder, item.id)
 		os.chdir(cwd)
 		item.completed = flag
@@ -245,8 +240,7 @@ def get_ids_from_videos(videos, archived_start_date):
 				print(str(e))
 		print(video_time)
 		print(archived_start_date)
-		print(video_time > archived_start_date)
-		if video_time > archived_start_date:
+		if archived_start_date == None or video_time > archived_start_date:
 			print("here 6666")
 			video_ids += [video["snippet"]["resourceId"]["videoId"]]
 	return video_ids
