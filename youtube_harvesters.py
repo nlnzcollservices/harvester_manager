@@ -103,7 +103,7 @@ def get_playlist(item):
 	"""
 	print(item.id)
 	url = item.url
-	item.agent_name = agent_name+"_get_channel"
+	item.agent_name = agent_name+"_get_playlist"
 	storage_folder = item.storage_folder
 	try:
 		cwd = os.getcwd()
