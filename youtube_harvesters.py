@@ -294,40 +294,40 @@ def video_collector(video_ids, storage_folder ,id):
 	"""
 
 	storage_folder = "."
-	ydl = youtube_dl.YoutubeDL({'outtmpl':os.path.join(storage_folder,"files",'%(id)s.%(ext)s')})
-	json_data = []
-	comments_data = []
+	#ydl = youtube_dl.YoutubeDL({'outtmpl':os.path.join(storage_folder,'%(id)s.%(ext)s')})
 	flag = True
 	for vidid in video_ids:
+		ydl = youtube_dl.YoutubeDL({'outtmpl':os.path.join(storage_folder,id+"_"+vidid,'%(id)s_%(vidid)s.%(ext)s')})
 		url = "https://www.youtube.com/watch?v="+vidid
-		try:
-			res = youtube.videos().list(id = vidid, part = "snippet").execute()
-		except Exception as e:
-			youtube = build('youtube',"v3", developerKey=api_key)
-			res = youtube.videos().list(id = vidid, part = "snippet").execute()
-		json_data.append(res)
-		try:
-			comments_data.append(get_video_comments(youtube, part='snippet', videoId=vidid))
-		except Exception as e:
-			print(str(e))
-			print(vidid)
-			with open(os.path.join(storage_folder,'errors_{}.txt'.format(dt.now().strftime('%Y%m%d'))), "a") as f:
-				f.write(vidid + "|" + id + " " + str(e) )
-				f.write("\n")
 		try:
 			ydl.download([url])	
 		except Exception as e:
 			print(str(e))
 			print(vidid)
-			with open(os.path.join(storage_folder,'errors_{}.txt'.format(dt.now().strftime('%Y%m%d'))), "a") as f:
+			with open(os.path.join(storage_folder,id+"_"+vidid,'errors_{}.txt'.format(dt.now().strftime('%Y%m%d'))), "a") as f:
 				f.write(vidid + "|" + id + " " + str(e) )
 				f.write("\n")
 				flag = False					
-	with open(os.path.join(storage_folder, str(id)+'.json'), 'a') as json_file:
-		json.dump(json_data, json_file)
-	with open(os.path.join(storage_folder, str(id)+'_comments.json'), 'a') as json_file:
-		json.dump(comments_data, json_file)
-	return flag
+		try:
+			res = youtube.videos().list(id = vidid, part = "snippet").execute()
+		except Exception as e:
+			youtube = build('youtube',"v3", developerKey=api_key)
+			res = youtube.videos().list(id = vidid, part = "snippet").execute()
+		with open(os.path.join(storage_folder,id+"_"+vidid, str(id)+'.json'), 'a') as json_file:
+			json.dump(res, json_file)
+		try:
+			comments = get_video_comments(youtube, part='snippet', videoId=vidid)
+			with open(os.path.join(storage_folder,id+"_"+vidid,str(id)+'_comments.json'), 'a') as json_file:
+				json.dump(comments, json_file)
+
+		except Exception as e:
+			print(str(e))
+			print(vidid)
+			with open(os.path.join(storage_folder,id+"_"+vidid,'errors_{}.txt'.format(dt.now().strftime('%Y%m%d'))), "a") as f:
+				f.write(vidid + "|" + id + " " + str(e) )
+				f.write("\n")
+
+		return flag
 	
 
 def main():
