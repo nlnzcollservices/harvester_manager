@@ -19,7 +19,7 @@ from youtube_harvesters import get_channel as youtube_get_channel
 from youtube_harvesters import get_user as youtube_get_user
 from youtube_harvesters import get_playlist as youtube_get_playlist
 from vimeo_harvesters import get_video as vimeo_get_video
-from vimeo_harvesters import get_channel as youtube_get_channel
+from vimeo_harvesters import get_channel as vimeo_get_channel
 
 # project_folder = "\\".join(os.getcwd().split('\\')[:-1])
 sys.path.insert(0, r'C:\Source\secrets_and_credentials')
