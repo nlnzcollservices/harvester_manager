@@ -121,10 +121,10 @@ def item_parser(item):
 		# my_harvester = Youtube_harvester(self.data)
 		# elif self.content_type == "InstagramItem" and self.content_type in my_content_types:
 		# 		flag, self.location = instagramm_item()
-		elif self.content_type == "VimeoVideo" and self.content_type in my_content_types:
-			flag, self.location = vimeo_get_video(item)
-		elif self.content_type == "VimeoChannel" and self.content_type in my_content_types:
-			flag, self.location = vimeo_get_channel(item)
+		elif item.content_type == "VimeoVideo" and item.content_type in my_content_types:
+			item = vimeo_get_video(item)
+		elif item.content_type == "VimeoChannel" and item.content_type in my_content_types:
+			item = vimeo_get_channel(item)
 		elif item.content_type == "YoutubeVideo" and item.content_type in my_content_types:
 			item = youtube_get_video(item)
 		elif item.content_type == "YoutubeChannel" and item.content_type in my_content_types:
