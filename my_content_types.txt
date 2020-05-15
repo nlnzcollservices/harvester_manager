@@ -1,0 +1,6 @@
+YoutubePlaylist
+YoutubeChannel
+YoutubeUser
+YoutubeVideo
+VimeoVideo
+VimeoChannel

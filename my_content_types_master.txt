@@ -11,3 +11,5 @@ YoutubeUser
 YoutubeVideo
 TwitchVideo
 TwitchAccount
+VimeoVideo
+VimeoChannel
