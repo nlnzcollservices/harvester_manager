@@ -18,6 +18,8 @@ from youtube_harvesters import get_video as youtube_get_video
 from youtube_harvesters import get_channel as youtube_get_channel
 from youtube_harvesters import get_user as youtube_get_user
 from youtube_harvesters import get_playlist as youtube_get_playlist
+from vimeo_harvesters import get_video as vimeo_get_video
+from vimeo_harvesters import get_channel as youtube_get_channel
 
 # project_folder = "\\".join(os.getcwd().split('\\')[:-1])
 sys.path.insert(0, r'C:\Source\secrets_and_credentials')
@@ -119,8 +121,10 @@ def item_parser(item):
 		# my_harvester = Youtube_harvester(self.data)
 		# elif self.content_type == "InstagramItem" and self.content_type in my_content_types:
 		# 		flag, self.location = instagramm_item()
-		# elif self.content_type == "VimeoVideo" and self.content_type in my_content_types:
-		# 		flag, self.location = vimeo_video()
+		elif self.content_type == "VimeoVideo" and self.content_type in my_content_types:
+		 		flag, self.location = vimeo_video(item)
+		elif self.content_type == "VimeoChannel" and self.content_type in my_content_types:
+		 		flag, self.location = vimeo_channel(item)
 		elif item.content_type == "YoutubeVideo" and item.content_type in my_content_types:
 			item = youtube_get_video(item)
 		elif item.content_type == "YoutubeChannel" and item.content_type in my_content_types:
