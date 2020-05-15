@@ -29,6 +29,8 @@ def get_video(item):
 	Returns:
 		item (obj) - contains row data from spreadsheet with "completed" set True or False
 	"""
+	print(item.id)
+	print("Video")
 	url = item.url
 	item.agent_name = agent_name+"_get_video"
 	storage_folder = item.storage_folder
@@ -58,6 +60,7 @@ def get_channel(item):
 		item (obj) - contains row data from spreadsheet with "completed" set True or False
 	"""
 	print(item.id)
+	print("Channel")
 	url = item.url
 	item.agent_name = agent_name+"_get_channel"
 	storage_folder = item.storage_folder
@@ -84,6 +87,7 @@ def get_channel(item):
 			if next_page_token is None:
 				break
 		video_ids = get_ids_from_videos(videos, item.archived_start_date)
+		print("go to video collector")
 		flag = video_collector(video_ids, storage_folder, item.id)
 		os.chdir(cwd)
 		item.completed = flag
@@ -102,6 +106,7 @@ def get_playlist(item):
 		item (obj) - contains row data from spreadsheet with "completed" set True or False
 	"""
 	print(item.id)
+	print("Playlist")
 	url = item.url
 	item.agent_name = agent_name+"_get_playlist"
 	storage_folder = item.storage_folder
@@ -146,7 +151,8 @@ def get_user(item):
 
 
 	"""
-	
+	print(item.id)
+	print("User")
 	item.agent_name = agent_name+"_get_user"
 	try:
 		cwd = os.getcwd()
@@ -294,40 +300,81 @@ def video_collector(video_ids, storage_folder ,id):
 	"""
 
 	storage_folder = "."
-	#ydl = youtube_dl.YoutubeDL({'outtmpl':os.path.join(storage_folder,'%(id)s.%(ext)s')})
 	flag = True
+	print(video_ids)
+	csv_rows = []
 	for vidid in video_ids:
-		ydl = youtube_dl.YoutubeDL({'outtmpl':os.path.join(storage_folder,id+"_"+vidid,'%(id)s_%(vidid)s.%(ext)s')})
+		print(vidid)
+		res= None
+		comments = None
+		csv_row = []
+		csv_row.append(id)
+		csv_row.append(vidid)
+		csv_row.append(dt.now().strftime('%Y%m%d %H:%M:%S'))
+		print(csv_row)
+		ydl = youtube_dl.YoutubeDL({'outtmpl':os.path.join(storage_folder, vidid, vidid+'.'+'%(ext)s')})
 		url = "https://www.youtube.com/watch?v="+vidid
 		try:
 			ydl.download([url])	
+			csv_row.append("True")
+
+
 		except Exception as e:
+			csv_row.append('False')
 			print(str(e))
 			print(vidid)
-			with open(os.path.join(storage_folder,id+"_"+vidid,'errors_{}.txt'.format(dt.now().strftime('%Y%m%d'))), "a") as f:
+			with open(os.path.join(storage_folder, vidid,'errors_{}.txt'.format(dt.now().strftime('%Y%m%d'))), "a") as f:
 				f.write(vidid + "|" + id + " " + str(e) )
 				f.write("\n")
 				flag = False					
 		try:
 			res = youtube.videos().list(id = vidid, part = "snippet").execute()
+			
 		except Exception as e:
 			youtube = build('youtube',"v3", developerKey=api_key)
-			res = youtube.videos().list(id = vidid, part = "snippet").execute()
-		with open(os.path.join(storage_folder,id+"_"+vidid, str(id)+'.json'), 'a') as json_file:
+			try:
+				res = youtube.videos().list(id = vidid, part = "snippet").execute()
+			except Exception as e:
+				pass
+		
+		if res:
+			if res == []:
+				csv_row.append("Fasle")
+			else:
+				csv_row.append('True')
+		else:
+			csv_row.append("False")
+		print(csv_row)
+		with open(os.path.join(storage_folder, vidid, vidid+'.json'), 'w') as json_file:
 			json.dump(res, json_file)
 		try:
 			comments = get_video_comments(youtube, part='snippet', videoId=vidid)
-			with open(os.path.join(storage_folder,id+"_"+vidid,str(id)+'_comments.json'), 'a') as json_file:
+			with open(os.path.join(storage_folder, vidid, vidid+'_comments.json'), 'w') as json_file:
 				json.dump(comments, json_file)
 
 		except Exception as e:
 			print(str(e))
 			print(vidid)
-			with open(os.path.join(storage_folder,id+"_"+vidid,'errors_{}.txt'.format(dt.now().strftime('%Y%m%d'))), "a") as f:
+			with open(os.path.join(storage_folder, vidid,'errors_{}.txt'.format(dt.now().strftime('%Y%m%d'))), "a") as f:
 				f.write(vidid + "|" + id + " " + str(e) )
 				f.write("\n")
-
-		return flag
+		
+		if comments:
+			if comments == []:
+				csv_row.append("Fasle")
+			else:
+				csv_row.append('True')
+		else:
+			csv_row.append("False")
+		print(csv_row)
+		csv_rows.append(csv_row)
+	print(csv_rows)
+	print(os.path.join(storage_folder, id+'.csv'))
+	with open (os.path.join(storage_folder, id+'.csv'), 'a') as f:
+		csv_writer = csv.writer(f, quoting=csv.QUOTE_NONE)
+		#csv_writer.writerow (["Id","Video id","Date Time", "Video", "Metadata", "Comments"]) # write header
+		csv_writer.writerows(csv_rows)
+	return flag
 	
 
 def main():
