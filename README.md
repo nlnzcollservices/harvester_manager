@@ -5,7 +5,7 @@ The codebase that runs the social media harvester manager.
 # The project
 
 Collectors add content to a google spreadsheet. 
-The harvester manager, when run, pulls the sheet, and row by row checks if it needs to do anything. 
+The harvester manager, when run, pulls the sheet and row by row checks if it needs to do anything. 
 
 ### Choice one - do nothing
 
@@ -30,13 +30,13 @@ This is so different machines can be set up to only capture specific content dep
 
 ## The harvest
 
-The spreadsheet row data is handed off to the apporiate harvester. Each one will be documented below. 
+The spreadsheet row data is handed off to the appropriate harvester. Each one will be documented below. 
 
 Upon success, the resulting data is handed back to the manager script, who updates the google sheet as needed. 
 
 ### facebook_harvesters.py
 
-Only handles facebook live video. If multiple videos are wanted, its best to run a custom harvest and had off a list of video URLS. 
+Only handles facebook live video. If multiple videos are wanted, its best to run a custom harvest and hand off a list of video URLS. 
 
 Requires the `fbdown` tool to be accessible to the calling machine commandline
 
@@ -83,3 +83,98 @@ Needs youtube-dl at commandline
 
 https://ytdl-org.github.io/youtube-dl/index.html
 
+
+
+## The Spreadsheet
+
+This is a brittle beast. The columns are hard coded. There are nuances that emerged over time. 
+
+You need a google docs api key/credentials. These are managed in script as local vars. 
+
+### a - Unique Identifier
+
+Originally the tool was designed to support multiple assets against a single ID - conceptually allowing mutiple sources to aggregated in to a single folder. It was a terrible idea. Do not reuse unique identifiers :( 
+
+This is used as the parent folder for any content collected for this row
+
+### b - Brief Description
+
+Describes identified content 
+
+Used by curatorial staff. 
+
+### c - Creator (if known)
+
+Name of content creator
+
+Used by curatorial staff
+
+### d - Ready for harvest (Y/N/?)
+
+Accepts only `Y`, `N` or `?`
+
+`?` is used by technical staff to indicate they had a problem with the content and need the owner to check it. 
+
+### e - Category
+
+Type of content. Useful for ntoing collection destination.  
+
+Used by curatorial staff
+
+### f - Location
+
+Not used. 
+
+Content platform. 
+
+### g - Content Type (list)
+
+Used to steer the harevster choice. Choices are sub platform (e.g. TwitterAccount, or TwitterTweet) 
+
+### h - Link
+
+This is the magical URL. the start of any harvest. 
+
+### i - Date range
+
+Used to describe if the whole account is grabbed, or jsut a range. 
+
+Not properly implimented yet :( 
+
+### j - Recurring (Y/N) 
+
+Used to say if there is an expectation that this account is regularly harvested. 
+
+Not well implemented
+
+### k - Scope
+
+describes the atomic data types expected. 
+
+Currently only informational. 
+
+### l - Date Archived
+
+Written by harvester when completed. 
+
+### M - Collected (Y/N)
+
+Set by harvester when completed
+
+### N - Staff/Team Responsible
+
+Tries to record the last hand to touch the item. 
+Written manually or by the harvester
+
+### o - Storage Location
+
+Tries to record the location of the harvest. Complicated when stuff is on differnet mahcines or moved... 
+
+### p - Notes
+
+Human notes. 
+
+
+### q - Screengrabs (Y/N)
+
+Not used yet. 
