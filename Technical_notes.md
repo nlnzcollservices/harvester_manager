@@ -1,4 +1,4 @@
-### Technical Notes
+# Technical Notes
 
 ## Summary
 
@@ -10,14 +10,7 @@ The harvesters use any method they can to do an individual harvest. This can be 
 
 The manager is driven by the contents of an assigned google spreadsheet. 
 
-## To do 
-
-1. Clean up the secrets file - there is a method of restricting keys to local machines etc. This needs cleaning up / setting up like the usual c:\sources\secrets methods, 
-and the google sheet location adding. 
-
-2. 
-
-## The Manager
+# The Manager
 
 beta_2_manager.py
 
@@ -72,3 +65,23 @@ When an `Item()` object is returned, the following fields in the spreadsheet may
     
     column [n] 'Staff/Team Responsible' set to item.agent_name
     column [o] 'Storage Location' set to item.storage_folder)
+
+# Harvesters
+
+All havesters have to follow the same pattern. 
+
+1. Must accept a properly populated `Item()` class object as the input, returns the same object with extra data at completetion. 
+2. Must have an agent name
+3. Agent names must be incremented at version change so its clear which version was used at any time
+4. Must be able to 'see' (write to) the storage location
+5. Must accept the `item.url` as the primary seed. 
+6. On success return `item.completed` as `True`
+7. On failure return `item.completed` as `False`
+8. The harvester does not touch (read or write) the spreadsheet
+9. Individual harvesters methods are self contained python functions
+10. Harvester functions related by platform  (TwitterTweet, TwitterAccount) should be grouped in to one library, (`twitter_harvesters.py`) but called individually  (`from twitter_harvesters import get_tweet as twitter_get_tweet`, `from twitter_harvesters import get_account as twitter_get_account`) 
+11. Harvester functions can be called anything sensible in the libary, but aliased into the manager via the following convention `[platform]_get_[unit]` 
+
+## facebook_harvesters.py
+
+At version `facebook_harvesters_1`
