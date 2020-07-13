@@ -41,17 +41,17 @@ The item class is exchange object - all harvesters are built to accept and retur
 
 The minimum `Item()` class data object for exchange with a harvester module is: 
 
-		self.id # string 
-		self.ready # bool
-		self.content_type # controlled vocab
-		self.url # string 
-		self.date_range  # can be None
-		self.scope  # contolled vocab - not currently used
-		self.storage_location # not really used, see self.storage_folder
-		self.completed # bool
-		self.storage_folder # string
-		self.agent_name # string - set in harvester
-		self.archived_start_date # can be None 
+    self.id # string 
+    self.ready # bool
+    self.content_type # controlled vocab
+    self.url # string 
+    self.date_range  # can be None
+    self.scope  # contolled vocab - not currently used
+    self.storage_location # not really used, see self.storage_folder
+    self.completed # bool
+    self.storage_folder # string
+    self.agent_name # string - set in harvester
+    self.archived_start_date # can be None 
     self.row_number # int - used when writing outcomes to spreadsheet after harvest
 
 There are more fields, these drive behaviour in the manager layer, or are informational only. 
@@ -63,15 +63,12 @@ When an `Item()` class object comes back from a harvester the following data is 
     self.completed # bool (must be True) 
     
 When an `Item()` object is returned, the following fields in the spreadsheet may be updated:
-
-
-	ws.update_cell(item.row_number, 12, dt.now().strftime("%d.%m.%Y") )
-  column [l] = "Date Archived"
     
-	if item.reccuring == "N":
-		column [m] ("Collected (Y/N)") 	set to "Y"
-  else:
-		column [m] ("Collected (Y/N)") 	set to "N"
+    column [l] = "Date Archived" # (dd/mm/yy) 
+    if item.reccuring == "N":
+        column [m] ("Collected (Y/N)") 	set to "Y"
+    else:
+        column [m] ("Collected (Y/N)") 	set to "N"
     
-	column [n] 'Staff/Team Responsible' set to item.agent_name
-	column [o] 'Storage Location' set to item.storage_folder)
+    column [n] 'Staff/Team Responsible' set to item.agent_name
+    column [o] 'Storage Location' set to item.storage_folder)
