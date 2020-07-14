@@ -132,30 +132,31 @@ Content platform.
 
 ### g - Content Type (list)
 
-Used to steer the harevster choice. Choices are sub platform (e.g. TwitterAccount, or TwitterTweet) 
+Used to steer the harvester choice by the manager tool. Choices are sub platform (e.g. TwitterAccount, or TwitterTweet). Each choice has a matching harvester function that does the work.  
 
-The list of working harvesters is found in the `my_content_types_master.txt` in the git. 
+The list of mostly working harvesters is found in the `my_content_types_master.txt` in the git. 
 
-`FacebookVideo
-InstagramAccount
-InstagramItem
-InstagramLive
-TiktokVideo
-Tweet
-TwitterAccount
-VimeoVideo
-YoutubePlaylistYoutubeChannel
-YoutubeUser
-YoutubeVideo
-TwitchVideo
-TwitchAccount
-VimeoVideo
-VimeoChannel`
+    FacebookVideo
+    InstagramAccount
+    InstagramItem
+    InstagramLive
+    TiktokVideo
+    TwitterTweet
+    TwitterAccount
+    VimeoVideo
+    YoutubePlaylistYoutubeChannel
+    YoutubeUser
+    YoutubeVideo
+    TwitchVideo
+    TwitchAccount
+    VimeoVideo
+    VimeoChannel
 
+Each manager instance has its own list of harvesters it supports, as specified in the file `my_content_types.txt` This file should be changed to ensure that each manager instance only harvests content the host machine is set up for, or as suits a division of labour. This means that many managers can be set up to work in one shared spreadsheet 
 
 ### h - Link
 
-This is the magical URL. the start of any harvest. 
+This is the triggering URL. The start of any harvest. Has to be correct for the content type selected. Technical details, especially around URL selection and subsequent harvest scope are found in the tehcnical read me in this git.  
 
 ### i - Date range
 
@@ -173,7 +174,7 @@ Not well implemented
 
 describes the atomic data types expected. 
 
-Currently only informational. 
+Currently only informational. It was intended to describe the desirable scope of the harvest, and eventually to drive any scoping behaviour to set out 'depth' of harvest. 
 
 ### l - Date Archived
 
@@ -196,7 +197,6 @@ Tries to record the location of the harvest. Complicated when stuff is on differ
 
 Human notes. 
 
-
 ### q - Screengrabs (Y/N)
 
-Not used yet. 
+Not used yet. The intent is to add in another screen shotting tool, and support the making of a screen grab image of a url to augment a harvest. The screen shotter code exists here: https://github.com/jayGattusoNLNZ/page_harvester but has not been built into the struture of this project yet.  
