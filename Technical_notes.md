@@ -2,17 +2,22 @@
 
 ## Summary
 
-All writtten in python 3.6+
+This tool has two main parts. A harvest manager, and content harvesters.
 
-Has two main parts. Manager, and harvesters. 
+Its designed to be modular, and extensible. Any harvester can be changed without impacting the rest of the tool. New harvesters can be added without 
 
 The harvesters use any method they can to do an individual harvest. This can be python native code, or a `subproc` call from within python to any commandline visible tool
 
 The manager is driven by the contents of an assigned google spreadsheet. 
 
+It was built in a huge hurry due to emerging covid19 collection needs, whcih means that there is lots to go back and clean up if its expected to work as BAU tool. Only mission critical code was changed during its rapid build. This also means there will be errors and bugs. Apols.     
+
+Written in python 3.6+
+
 # The Manager
 
-beta_2_manager.py
+
+Currently: `beta_2_manager.py`
 
 ### to do 
 
@@ -22,7 +27,7 @@ a. Things get moved around.
 b. Things get added/removed
 3. Build a spoofing/testing `item()` and testing 'spreadsheet' to mock all the harvester cases
 4. Fix the confusion over `self.storage_folder` and `self.storage_location` in `Item()`
-5. Fix all the harvesters so they properly follow the agreen content structure. This was a late addition, so some ealier harvesters do not. Assume any v1 harvester needs to be cleaned up. 
+5. Fix all the harvesters so they properly follow the agreed harvest content structure. This requirement was a late addition, so some earlier harvesters do not adhere to the rules. Assume any v1 harvester needs to be cleaned up. 
 
 
 ### Notes
@@ -98,7 +103,7 @@ The structure of harvested content should follow this pattern.
     e.g.  `.\1000991\`
     It is the job of the harvester to make this folder. 
 2. There is always at least one child folder which is another unique id. This should come from the content source. e.g. if the unit being harevsted is a youtube video, there is child folder that is the labelled the youtube video ID. e.g.  `.\1000991\tehEEHS23\`
-3. If there are mutiple items (e.g. a youtube playlist) there are multiple child folders with each content ID as its label.  e.g.  `.\1000991\tehEEHS23\`, `.\1000991\erhfrYYHe7\`,\`, `.\1000991\aebbdfYYG734\` etc.  
+3. If there are mutiple items (e.g. a youtube playlist) there are multiple child folders with each content ID as its label.  e.g.  `.\1000991\tehEEHS23\`, `.\1000991\erhfrYYHe7\`, `.\1000991\aebbdfYYG734\` etc.  
 3. Inside this folder is all content that relates to the harvested item. 
 4. Any content that isn't epected to change (e.g. the youtube video, or the instaagram image) is placed here, and has the id as its filename, with an approriate file extension.    e.g. `.\1000991\tehEEHS23\tehEEHS23.mp4`
 5. Any additional content collected as part of an item harvest is placed in the child folder, and sensible labelled. Pay attention to repeated harvests, and how items contents like 'comments' or informational blocks like a "tweet" may change. Use a combination of item ID, a hint keyword, and datetime stamp in filenames to ensure that no item is accidentally over written. e.g.  `.\1000991\tehEEHS23\tehEEHS23_comments_dd-mm-yyyy.json` or `.\1000991\tehEEHS23\tehEEHS23_errors_dd-mm-yyyy.log`
@@ -108,3 +113,20 @@ This also massively helps deduping.
 ## facebook_harvesters.py
 
 At version `facebook_harvesters_1`
+
+#### todo put harvested videos in proper content structure
+#### todo automate and include manual method for `get_videos` using account name as trigger URL
+
+Has only one harevster for live videos
+
+`get_video(item)`
+
+Takes the the `item.url` and hands it to the `fbdown` tool in commandline via `subproc`
+
+Scope notes - Only harvests the given URL. 
+
+If multiple videos are requested, this must be called mutiple times. 
+
+N.B. There is a manual method for getting all the video urls from an account. In a browser, open the facebook page for the video feeds, manually scroll until the date range of videos required is visible in the browser. Save this browser page as an HTML file. Use the included facebook_video_url_parser.py file to get a list of video urls. Feed them to the same process. This isn't included in the harvester as a method yet because of the manual step needed to surface the urls html.  
+
+N.B. 
