@@ -134,6 +134,25 @@ Content platform.
 
 Used to steer the harevster choice. Choices are sub platform (e.g. TwitterAccount, or TwitterTweet) 
 
+The list of working harvesters is found in the `my_content_types_master.txt` in the git. 
+
+`FacebookVideo
+InstagramAccount
+InstagramItem
+InstagramLive
+TiktokVideo
+Tweet
+TwitterAccount
+VimeoVideo
+YoutubePlaylistYoutubeChannel
+YoutubeUser
+YoutubeVideo
+TwitchVideo
+TwitchAccount
+VimeoVideo
+VimeoChannel`
+
+
 ### h - Link
 
 This is the magical URL. the start of any harvest. 
