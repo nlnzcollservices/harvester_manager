@@ -2,12 +2,15 @@
 
 The codebase that runs the social media harvester manager. 
 
-# The project
+Collectors add content to a google spreadsheet - this is specified below. 
 
-Collectors add content to a google spreadsheet. 
+The manager tool is responsible for handing out harvest jobs (from various platforms) to a suitable harvester, and tracking the the outcomes on a shared spreadsheet  
+
+## The harvest manager
+
 The harvester manager, when run, pulls the sheet and row by row checks if it needs to do anything. 
 
-### Choice one - do nothing
+#### Choice one - do nothing
 
 this condition is met when:
 
@@ -19,7 +22,7 @@ Column M (Collected) is set to `Y` and column J (Recurring) is set to `Y`
 
 [to do - some of the logic here is iffy in the codebase]. 
 
-### Choice two - atttempt harvest
+#### Choice two - atttempt harvest
 
 If none of the conditions for do nothing are met, the tool them checks to see if its expecting to collect that particular content type. 
 It does this by comparing the value found in column D (Content type) and the items listed in the file called `my_content_types.txt`
@@ -28,11 +31,11 @@ If it can find a corresponding string, it initiates the appropriate harvester mo
 
 This is so different machines can be set up to only capture specific content depending on the team setup. 
 
-## The harvest
+## The harvesters
 
-The spreadsheet row data is handed off to the appropriate harvester. Each one will be documented below. 
+The spreadsheet row data is handed off to the appropriate harvester. Each one is documented below - see the technical readme for more notes / scoping paramaters (if any). 
 
-Upon success, the resulting data is handed back to the manager script, who updates the google sheet as needed. 
+Upon successful harvest, the resulting data is put in an agreed location, and key information is handed back to the manager tool, who updates the google sheet as needed. 
 
 ### facebook_harvesters.py
 
