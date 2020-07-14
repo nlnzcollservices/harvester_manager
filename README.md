@@ -33,7 +33,7 @@ This is so different machines can be set up to only capture specific content dep
 
 ## The harvesters
 
-The spreadsheet row data is handed off to the appropriate harvester. Each one is documented below - see the technical readme for more notes / scoping paramaters (if any). 
+The spreadsheet row data is handed off to the appropriate harvester. Each harevster is documented below - see the technical readme for more notes / scoping paramaters (if any). 
 
 Upon successful harvest, the resulting data is put in an agreed location, and key information is handed back to the manager tool, who updates the google sheet as needed. 
 
@@ -186,12 +186,17 @@ Set by harvester when completed
 
 ### N - Staff/Team Responsible
 
-Tries to record the last hand to touch the item. 
-Written manually or by the harvester
+Records the last hand to touch the item.
+
+Written manually or by the harvester - if the havester is doing the setting, the data is collected from a version string recorded in the harvester code. 
 
 ### o - Storage Location
 
-Tries to record the location of the harvest. Complicated when stuff is on differnet mahcines or moved... 
+Records the location of the harvest. Complicated when stuff is on different machines or moved after the fact.
+
+The whole tool uses the unique ID as folder label for any content collected - so this location should really tell us what the root folders are for the harvest ID folder, and  
+what machine the harvest is on. Needs some clean up work. #todo
+
 
 ### p - Notes
 
