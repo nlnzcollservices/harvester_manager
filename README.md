@@ -11,13 +11,37 @@ ___
 
 Conceptually, the tool looks a bit like this:- 
 
- *Social Media Harvest Google Spreadsheet*  
+---->*Social Media Harvest Google Spreadsheet*  
 
 Content Collectors add content to a google spreadsheet - this is specified below. 
 
- *harvest manager python script*
-    gives harvest jobs from spreadsheet to
-        *various harvester modules as needed* 
+----> Harvest manager Tool
+----> (gives harvest jobs from spreadsheet to various harvester modules as needed)
+-----> Currently supported: 
+
+---------> Twitter
+---------------> Tweet
+---------------> Account
+
+---------> YouTube
+---------------> Video
+---------------> Playlist
+---------------> User
+---------------> Channel
+
+--------->  Instagram
+---------------> Live videos
+---------------> Account 
+
+---------> Tiktok
+---------------> Video
+
+---------> Vimeo
+---------------> Account
+---------------> Video
+
+---------> Facebook
+---------------> Video
 
 The manager tool is responsible for handing out harvest jobs (from various platforms) to a suitable harvester, and tracking the the outcomes on a shared spreadsheet  
 
