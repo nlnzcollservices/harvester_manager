@@ -22,12 +22,11 @@ Currently: `beta_2_manager.py`
 ### to do 
 
 1. Abstract key management into its own function / script for better / easier management. 
-2. Abstract the spreadsheet reading so the `Item` class object is built by column heading name/string, and not column ID. 
-a. Things get moved around. 
-b. Things get added/removed
-3. Build a spoofing/testing `item()` and testing 'spreadsheet' to mock all the harvester cases
-4. Fix the confusion over `self.storage_folder` and `self.storage_location` in `Item()`
-5. Fix all the harvesters so they properly follow the agreed harvest content structure. This requirement was a late addition, so some earlier harvesters do not adhere to the rules. Assume any v1 harvester needs to be cleaned up. 
+2. Abstract the spreadsheet reading so the `Item` class object is built by column heading name/string, and not column ID. (Things get moved around, things get added/removed)
+3. Build a spoofing/testing `item()` and testing 'spreadsheet' to mock all the harvester cases (see `main()` in `twitter_harvesters.py` for basic approach.
+4. Build in way of calling any harvester independently (see `main()` in `twitter_harvesters.py` for basic approach.
+5. Fix the confusion over `self.storage_folder` and `self.storage_location` in `Item()`
+6. Fix all the harvesters so they properly follow the agreed harvest content structure. This requirement was a late addition, so some earlier harvesters do not adhere to the rules. Assume any v1 harvester needs to be cleaned up. 
 
 
 ### Notes
@@ -114,8 +113,9 @@ This also massively helps deduping.
 
 At version `facebook_harvesters_1`
 
-#### todo put harvested videos in proper content structure
-#### todo automate and include manual method for `get_videos` using account name as trigger URL
+!todo put harvested videos in proper content structure
+!todo automate and include manual method for `get_videos` using account name as trigger URL
+
 
 Has only one harevster for live videos
 
@@ -123,10 +123,171 @@ Has only one harevster for live videos
 
 Takes the the `item.url` and hands it to the `fbdown` tool in commandline via `subproc`
 
-Scope notes - Only harvests the given URL. 
+Scope notes - Only harvests the given URL. #todo - check the products. 
 
 If multiple videos are requested, this must be called mutiple times. 
 
 N.B. There is a manual method for getting all the video urls from an account. In a browser, open the facebook page for the video feeds, manually scroll until the date range of videos required is visible in the browser. Save this browser page as an HTML file. Use the included facebook_video_url_parser.py file to get a list of video urls. Feed them to the same process. This isn't included in the harvester as a method yet because of the manual step needed to surface the urls html.  
 
-N.B. 
+## insta_harvesters.py
+
+At version `insta_harvesters_1`
+
+!todo put harvested videos in proper content structure for both harvesters 
+!todo add in the comments/caption harvester - code exists [here] - needs blending in and structure agreed. 
+!todo needs a get_item method.
+
+`get_line(item)`
+
+Takes the the `item.url` and hands it to the `pyinstalive` tool in commandline via `subproc`
+
+`pyinstalive` live has a config file that needs to setting up with instgram keys etc. (see https://github.com/dvingerh/PyInstaLive) 
+
+Scope notes - collects any 'live' video thats visible on account. Live videos are visible for 24hours. Scope is therefore any account url, (from harvest time in spreadsheet minus 24 hours) to (harvest time in spreadsheet). Also can run as a daemon - listening/watching an account - and capture any live streams real time. 
+Also captures comments as a text file thats part of the harvest. 
+
+If multiple videos are found as part of the 24 hour stream archive it collects mutiple video files.
+
+`get_account(item)`
+
+Takes the the `item.url` and hands it to the `instagram-scraper` tool in commandline via `subproc`
+
+`instagram-scraper` needs a instgram username and password - this is handled as a local instance of the normal secrets method in the harvester. See https://github.com/arc298/instagram-scraper
+
+It writes its own log file, that I believe it uses to handle recurrent harvesting. 
+
+!todo need to really think about how to handle the harvester product vs the library shaped/SIP structured content, and how to not keep reharvesting the same accounts.  
+
+Scope notes - harvests anything visible to the given account (any public posts - video and images. Will collect whole account. 
+
+!todo needs caption code change 
+!todo - cull harvest between scope dates. As last modified dates are maintined, use these to filter for date scope.  
+
+`tiktok_harvesters.py`
+
+At version: `tiktok_harvesters_1`
+
+!todo put harvested videos in proper content structure
+!todo make get_account harvester  - manual method exists. not implimented. 
+
+Scope notes - harvests given video url only. 
+
+Harvester takes given video URL, resolves the url, finds the video object url in resulting HTML, downloads that url.
+
+Manual account method exists as proof of concept. Resolve account page, scroll until new thumbnails stop. Save html, search for video page URLs, send to get_video. Not close to implimentation.  
+
+## twitter_harvesters.py 
+
+at version `Twitter_harvester` + sub havester string
+
+!todo put harvested tweets in proper content structure
+!todo media resolve and save code to all harvesters in proper structure - code exists in module:  `get_assets(tweet, storage_folder)`
+
+Uses the `twarc` tool in python to handle tweeets. https://github.com/DocNow/twarc needs twitter keys and setup. 
+
+`get_tweet(item)`
+
+At version: `Twitter_harvester_1_get_tweet`
+
+Scope notes - takes tweet id  as twitter url, resolves tweet, saves tweet as json `{tweet_id}_{datetime}.json`. Does not collect any replies etc
+!todo add in getting replies. 
+
+Tries to find any media in the tweet and deal with it accordingly
+See `get_assets(tweet, storage_folder)`
+
+`get_account(item)`
+
+At version: `Twitter_harvester_1_get_account`
+
+Scope notes - takes tweet account as url, resolves all visible tweets, filters tweets to include only those after start date (`item.date_range` in given form from spreadsheet, dd.mm.yyyy), saves tweets as json `{tweet_id}_{datetime}.json`. 
+Does not collect any replies etc
+!todo add in getting replies. 
+
+Tries to find any media in the tweet and deal with it accordingly
+See `get_assets(tweet, storage_folder)`
+
+`get_assets(tweet, storage_folder)`
+
+See code for full logic. 
+
+For a given tweeeti checks the ['entities'] for a ['media'] section. If found it looks in the ['extended_entities']['media']['type'] element and collects any item that is ['photo'] or ['animated_gif'] or ['video']
+
+Any other type is logged as a URL in code, printed to terminal, but not further processed.
+!todo process unknown types
+
+File save name is per URL. 
+!todo - this needs to be cleaned up. needs to use data structure better.   
+
+N.B. Currently includes a basic `item()` mocking method in `main`. This should cleaned up, and reflected in all harvesters.  
+
+
+`vimeo_harvesters.py`
+
+Uses youtube_dl from within python. See https://pypi.org/project/youtube_dl/
+
+`get_channel(item)`
+
+At version: "vimeo_harvesters_get_channel" 
+!todo version agent_name properly
+!todo needs general clean up / code review 
+
+Takes channel as URL from `item`, and scrapes all videos visible to youTube-dl (public videos). 
+
+Scope notes - !todo
+
+`get_video(item)`
+
+At version: "vimeo_harvesters_get_video" 
+!todo version agent_name properly
+!todo needs general clean up / code review 
+
+Takes video as URL from `item`, and scrapes video if visible to youTube-dl (public videos). 
+
+Scope notes - !todo comments? 
+
+`youtube_harvesters.py`
+
+Uses youtube_dl from within python. See https://pypi.org/project/youtube_dl/ and some html scraping to get IDs. 
+
+
+`get_video(item)`
+
+At version: "youtube_harvesters_get_video" 
+!todo version agent_name properly
+!todo needs general clean up / code review 
+
+Takes video as URL from `item`, and scrapes video if visible to youTube-dl (public videos). 
+
+Scope notes - !todo comments? 
+
+
+`get_channel(item)`
+
+At version: "youtube_harvesters_get_channel" 
+!todo version agent_name properly
+!todo needs general clean up / code review 
+
+Takes channel as URL from `item`, and scrapes all videos visible to youTube-dl (public videos). 
+
+Scope notes - !todo comments? 
+
+`get_playlist(item)`
+
+At version: "youtube_harvesters_get_playlist" 
+!todo version agent_name properly
+!todo needs general clean up / code review 
+
+Takes playlist as URL from `item`, and scrapes all videos visible to youTube-dl (public videos). 
+
+Scope notes - !todo
+
+
+`get_user(item)`
+
+At version: "youtube_harvesters_get_user" 
+!todo version agent_name properly
+!todo needs general clean up / code review 
+
+Takes user as URL from `item`, and scrapes all videos visible to youTube-dl (public videos). 
+
+Scope notes - !todo comments? 
