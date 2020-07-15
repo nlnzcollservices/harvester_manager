@@ -6,6 +6,8 @@ This toll is designed to be a shared/distributed process, whoich means code is s
 
 To prevent the acciedental sharing of secrets, there is a carefully proscribed method that should be adhered to. 
 
+The local file contains all your secrets in the clear. Be aware.  
+
 ## Summary
 
 There is local file that is stored on any local machine, not in the git folder. It holds the various keys etc, and is never shared. 
@@ -18,14 +20,13 @@ You can store any secrets you need in this file. The googlesheet keys and locati
 
 Its a simple text file. 
 
-It must contain the heading 
+It must contain the section heading and then any secrets labelled accordingly. 
 
     [configuration]
-    
-and then any secrets labelled accordingly. 
-
      my_api_key =  123456789abcdefg
      sprsh = https://docs.google.com/spreadsheets/d/12345678990qwerty
+     instagram_username = ABCD
+     instgram_password = 1234
 
 ### the python code
 
@@ -35,10 +36,11 @@ and then any secrets labelled accordingly.
     config.read(sprsh_file)
     
 Set `secrets_and_credentials_fold` to the local folder you use to store the secrets file. 
-Set the last arguemnt in `sprsh_file` (`"spreadsheet") to the filename of your secrets file. 
+Set the last arguemnt in `sprsh_file` (`"spreadsheet"`) to the filename of your secrets file. 
 
     ## credentials
     sprsh = config.get("configuration","sprsh")
+    instagram_username = config.get("configuration","instagram_username")
     
-This gets any secret from the secrets file, in the section caled `"configuration"` that is labelled `"sprsh"`
+This gets any secret from the secrets file, in the section caled `"configuration"` that is labelled `sprsh`, and  `instagram_username`. These are now avail to python as  `sprsh` and `instagram_username` and can be used in scripts. 
     
