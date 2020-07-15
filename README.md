@@ -1,14 +1,29 @@
 # harvester_manager
 
-The codebase that runs the social media harvester manager. 
+Harvester Manager is a tool that automates the harvest of content from a variety of social platforms. 
 
-Collectors add content to a google spreadsheet - this is specified below. 
+Its designed to allow content collection staff to work autonomously, focusing on collection building.  
+
+It was put together during the Covid19 lockdown, to help with rapid collection of the covid19 experience as expressed through social media. 
+
+As a result, some parts of the process are underworked and have been intentionlly left in a 'just working' state. There is a developement plan included for all items in the technical_notes.md file.    
+___ 
+
+Conceptually, the tool looks a bit like this:- 
+
+ *Social Media Harvest Google Spreadsheet*  
+
+Content Collectors add content to a google spreadsheet - this is specified below. 
+
+ *harvest manager python script*
+    gives harvest jobs from spreadsheet to
+        *various harvester modules as needed* 
 
 The manager tool is responsible for handing out harvest jobs (from various platforms) to a suitable harvester, and tracking the the outcomes on a shared spreadsheet  
 
 ## The harvest manager
 
-The harvester manager, when run, pulls the sheet and row by row checks if it needs to do anything. 
+The harvester manager, when run, pulls the sheet from googledocs and row by row checks if it needs to do anything. 
 
 #### Choice one - do nothing
 
@@ -20,7 +35,9 @@ Column M (Collected) is set to `Y`
 or 
 Column M (Collected) is set to `Y` and column J (Recurring) is set to `Y`
 
-[to do - some of the logic here is iffy in the codebase]. 
+The '?' indicator was used by techncial operators when they couldn't harvest an item that had been set to 'Y'. It typcially meant the human collector needed to check the url. 
+
+!todo - some of the logic here is iffy in the codebase. The notion of recurring is not well handled at the moment.  
 
 #### Choice two - atttempt harvest
 
@@ -35,7 +52,9 @@ This is so different machines can be set up to only capture specific content dep
 
 The spreadsheet row data is handed off to the appropriate harvester. Each harevster is documented below - see the technical readme for more notes / scoping paramaters (if any). 
 
-Upon successful harvest, the resulting data is put in an agreed location, and key information is handed back to the manager tool, who updates the google sheet as needed. 
+See `Technical_notes.md` for more details and developement plans/bugs
+
+Upon successful harvest, the resulting data is put in an agreed storage location, and key information is handed back to the manager tool, who updates the google sheet as needed. 
 
 ### facebook_harvesters.py
 
