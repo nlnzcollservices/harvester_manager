@@ -15,34 +15,34 @@ Conceptually, the tool looks a bit like this:-
 
 Content Collectors add content to a google spreadsheet - this is specified below. 
 
-----> Harvest manager Tool
-----> (gives harvest jobs from spreadsheet to various harvester modules as needed)
------> Currently supported: 
+----> Harvest manager Tool  
+----> (gives harvest jobs from spreadsheet to various harvester modules as needed)  
+-----> Currently supported:   
 
----------> Twitter
----------------> Tweet
----------------> Account
-
----------> YouTube
----------------> Video
----------------> Playlist
----------------> User
----------------> Channel
-
---------->  Instagram
----------------> Live videos
----------------> Account 
-
----------> Tiktok
----------------> Video
-
----------> Vimeo
----------------> Account
----------------> Video
-
----------> Facebook
----------------> Video
-
+---------> Twitter  
+---------------> Tweet  
+---------------> Account    
+  
+---------> YouTube  
+---------------> Video  
+---------------> Playlist  
+---------------> User  
+---------------> Channel  
+  
+--------->  Instagram  
+---------------> Live videos  
+---------------> Account   
+  
+---------> Tiktok  
+---------------> Video  
+  
+---------> Vimeo  
+---------------> Account  
+---------------> Video  
+  
+---------> Facebook  
+---------------> Video  
+  
 The manager tool is responsible for handing out harvest jobs (from various platforms) to a suitable harvester, and tracking the the outcomes on a shared spreadsheet  
 
 ## The harvest manager
