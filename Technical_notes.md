@@ -4,9 +4,9 @@
 
 This tool has two main parts. A harvest manager, and content harvesters.
 
-Its designed to be modular, and extensible. Any harvester can be changed without impacting the rest of the tool. New harvesters can be added without 
+Its designed to be modular, and extensible. Any harvester can be changed without impacting the rest of the tool. New harvesters can be added without major changes being needed. A suitable ContentType string needs to be added to the spreadsheet, and also to the `my_content_types_master.txt` file in this repo. 
 
-The harvesters use any method they can to do an individual harvest. This can be python native code, or a `subproc` call from within python to any commandline visible tool
+The harvesters use any method they can to complete an individual harvest. This can be python native code, or a `subproc` call from within python to any commandline visible tool.
 
 The manager is driven by the contents of an assigned google spreadsheet. 
 
