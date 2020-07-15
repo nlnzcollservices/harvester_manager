@@ -339,7 +339,7 @@ def video_collector(video_ids, storage_folder ,id):
 		
 		if res:
 			if res == []:
-				csv_row.append("Fasle")
+				csv_row.append("False")
 			else:
 				csv_row.append('True')
 		else:
@@ -361,7 +361,7 @@ def video_collector(video_ids, storage_folder ,id):
 		
 		if comments:
 			if comments == []:
-				csv_row.append("Fasle")
+				csv_row.append("False")
 			else:
 				csv_row.append('True')
 		else:
