@@ -92,45 +92,45 @@ https://ytdl-org.github.io/youtube-dl/index.html
 
 This is a brittle beast. The columns are hard coded. There are nuances that emerged over time. 
 
-You need a google docs api key/credentials. These are managed in script as local vars. 
+You need a google docs api key/credentials. These are managed in script as local variables via the usual secrets method. 
 
-### a - Unique Identifier
+### column a - 'Unique Identifier'
 
 Originally the tool was designed to support multiple assets against a single ID - conceptually allowing mutiple sources to aggregated in to a single folder. It was a terrible idea. Do not reuse unique identifiers :( 
 
 This is used as the parent folder for any content collected for this row
 
-### b - Brief Description
+### column b - 'Brief Description'
 
 Describes identified content 
 
 Used by curatorial staff. 
 
-### c - Creator (if known)
+### column c - 'Creator (if known)'
 
 Name of content creator
 
 Used by curatorial staff
 
-### d - Ready for harvest (Y/N/?)
+### column d - 'Ready for harvest (Y/N/?)'
 
 Accepts only `Y`, `N` or `?`
 
 `?` is used by technical staff to indicate they had a problem with the content and need the owner to check it. 
 
-### e - Category
+### column e - 'Category'
 
 Type of content. Useful for ntoing collection destination.  
 
 Used by curatorial staff
 
-### f - Location
+### column f - 'Location'
 
 Not used. 
 
 Content platform. 
 
-### g - Content Type (list)
+### column g - 'Content Type (list)'
 
 Used to steer the harvester choice by the manager tool. Choices are sub platform (e.g. TwitterAccount, or TwitterTweet). Each choice has a matching harvester function that does the work.  
 
@@ -144,7 +144,8 @@ The list of mostly working harvesters is found in the `my_content_types_master.t
     TwitterTweet
     TwitterAccount
     VimeoVideo
-    YoutubePlaylistYoutubeChannel
+    YoutubePlaylist
+    YoutubeChannel
     YoutubeUser
     YoutubeVideo
     TwitchVideo
@@ -154,43 +155,48 @@ The list of mostly working harvesters is found in the `my_content_types_master.t
 
 Each manager instance has its own list of harvesters it supports, as specified in the file `my_content_types.txt` This file should be changed to ensure that each manager instance only harvests content the host machine is set up for, or as suits a division of labour. This means that many managers can be set up to work in one shared spreadsheet 
 
-### h - Link
+NB. This list was originally designed to hold only havesters that have a working method. This become tricky to maintain as the project grew, and as such, there are content types that do not yet have working harvesters:
+
+   InstagramItem
+   TwitchAccount
+
+### column h - 'Link'
 
 This is the triggering URL. The start of any harvest. Has to be correct for the content type selected. Technical details, especially around URL selection and subsequent harvest scope are found in the tehcnical read me in this git.  
 
-### i - Date range
+### column i - 'Date range'
 
 Used to describe if the whole account is grabbed, or jsut a range. 
 
 Not properly implimented yet :( 
 
-### j - Recurring (Y/N) 
+### column j - 'Recurring (Y/N)' 
 
 Used to say if there is an expectation that this account is regularly harvested. 
 
 Not well implemented
 
-### k - Scope
+### column k - 'Scope'
 
 describes the atomic data types expected. 
 
 Currently only informational. It was intended to describe the desirable scope of the harvest, and eventually to drive any scoping behaviour to set out 'depth' of harvest. 
 
-### l - Date Archived
+### column l - 'Date Archived'
 
 Written by harvester when completed. 
 
-### M - Collected (Y/N)
+### column M - 'Collected (Y/N)'
 
 Set by harvester when completed
 
-### N - Staff/Team Responsible
+### column N - 'Staff/Team Responsible'
 
 Records the last hand to touch the item.
 
 Written manually or by the harvester - if the havester is doing the setting, the data is collected from a version string recorded in the harvester code. 
 
-### o - Storage Location
+### column o - 'Storage Location'
 
 Records the location of the harvest. Complicated when stuff is on different machines or moved after the fact.
 
@@ -198,10 +204,10 @@ The whole tool uses the unique ID as folder label for any content collected - so
 what machine the harvest is on. Needs some clean up work. #todo
 
 
-### p - Notes
+### column p - 'Notes'
 
 Human notes. 
 
-### q - Screengrabs (Y/N)
+### column q - 'Screengrabs (Y/N)'
 
 Not used yet. The intent is to add in another screen shotting tool, and support the making of a screen grab image of a url to augment a harvest. The screen shotter code exists here: https://github.com/jayGattusoNLNZ/page_harvester but has not been built into the struture of this project yet.  
