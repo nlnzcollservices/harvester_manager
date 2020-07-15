@@ -157,8 +157,8 @@ Each manager instance has its own list of harvesters it supports, as specified i
 
 NB. This list was originally designed to hold only havesters that have a working method. This become tricky to maintain as the project grew, and as such, there are content types that do not yet have working harvesters:
 
-   InstagramItem
-   TwitchAccount
+    InstagramItem
+    TwitchAccount
 
 ### column h - 'Link'
 
