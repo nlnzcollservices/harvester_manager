@@ -57,8 +57,8 @@ make a text file called "spreadsheet" , in the folder specificed in 'secrets_and
 
 2. from `beta_2_manager.py` 
 
-      credential_file = os.path.join(secrets_and_credentials_fold, "credentials")
-      client_secrets_file = os.path.join(secrets_and_credentials_fold, "client_secrets.json")
+       credential_file = os.path.join(secrets_and_credentials_fold, "credentials")
+       client_secrets_file = os.path.join(secrets_and_credentials_fold, "client_secrets.json")
 
 Put the credentials file from step 2 into the same folder, rename it "client_secrets.json".  You can change the name to something more suitable,  make sure you change the code accordingly. 
 
