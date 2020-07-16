@@ -7,16 +7,19 @@ It is designed to allow content collection staff to work autonomously, focusing 
 It was put together during the Aotearoa New Zealand Covid-19 lockdown, to help with rapid collection of the Covid-19 experience as expressed through social media. 
 
 As a result, some parts of the process are underworked and have been intentionlly left in a 'just working' state. There is a development plan included for all items in the [technical_notes.md file](https://github.com/jayGattusoNLNZ/harvester_manager/blob/master/Technical_notes.md).    
-___ 
+
+<br>
+
+---
 
 Conceptually, the tool looks a bit like this:- 
 
 ## Social Media Harvest Google Spreadsheet 
 
-Content Collectors add content to a Google spreadsheet - this is specified below. 
+Content Collectors add content to a Google spreadsheet - this is [specified below](#the-spreadsheet).
 
 ## Harvest Manager Tool
-Hands harvest jobs from spreadsheet to various harvester modules as needed.
+Hands harvest jobs from spreadsheet to various [harvester modules](#the-harvesters) as needed.
 
 -----> Currently supported:   
 
@@ -60,11 +63,11 @@ Column M (Collected) is set to `Y`
 OR  
 Column M (Collected) is set to `Y` AND column J (Recurring) is set to `Y`
 
-The '?' indicator was used by techncial operators when they couldn't harvest an item that had been set to 'Y'. It typically meant the human collector needed to check the URL. 
+The '?' indicator was used by technical operators when they couldn't harvest an item that had been set to 'Y'. It typically meant the human collector needed to check the URL. 
 
 - [ ] !todo - some of the logic here is iffy in the codebase. The notion of 'recurring' is not well handled at the moment.  
 
-#### Choice two - atttempt harvest
+#### Choice two - attempt harvest
 
 If none of the conditions for do nothing are met, the tool then checks to see if it knows how to collect that particular content type. 
 It does this by comparing the value found in column D (Content type) and the items listed in the file called `my_content_types.txt`
@@ -81,7 +84,7 @@ See [`Technical_notes.md`](https://github.com/jayGattusoNLNZ/harvester_manager/b
 
 Upon successful harvest, the harvested content and metadata is put in an agreed storage location, and key information is handed back to the Harvester Manager Tool, which updates the Google sheet as needed. 
 
-### facebook_harvesters.py
+### facebook_harvesters
 
 Currently only handles facebook video. If multiple videos are wanted, its best to run a custom harvest and hand off a list of video URLS. (See https://github.com/jayGattusoNLNZ/harvester_manager/blob/master/work_in_progress/manual_method_for_facebook_video.py) 
 
@@ -97,9 +100,7 @@ Has two modes, and needs two tools:
 
 and 
 
-2. 
-
-`pip3 install instagram-scraper` https://github.com/rarcega/instagram-scraper
+2. `pip3 install instagram-scraper` https://github.com/rarcega/instagram-scraper
 
 ### tiktok_harvesters
 
@@ -119,9 +120,11 @@ Needs youtube-dl at commandline: https://ytdl-org.github.io/youtube-dl/index.htm
 
 ### youtube_harvesters
 
-Needs youtube-dl at commandline: https://ytdl-org.github.io/youtube-dl/index.html
+Needs youtube-dl at commandline: https://ytdl-org.github.io/youtube-dl/index.html  
 
+<br>
 
+---
 
 ## The Spreadsheet
 
