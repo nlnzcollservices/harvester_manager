@@ -152,7 +152,7 @@ If multiple videos are found as part of the 24 hour stream archive it collects m
 
 Takes the the `item.url` and hands it to the `instagram-scraper` tool in commandline via `subproc`
 
-`instagram-scraper` needs a instgram username and password - this is handled as a local instance of the normal secrets method in the harvester. See https://github.com/arc298/instagram-scraper
+`instagram-scraper` needs a instgram username and password - this is handled as a local instance of the normal secrets method (see secrets_method.md) in the harvester. See https://github.com/arc298/instagram-scraper for the tool. 
 
 It writes its own log file, that I believe it uses to handle recurrent harvesting. 
 
