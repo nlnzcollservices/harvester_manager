@@ -160,8 +160,8 @@ It writes its own log file, that I believe it uses to handle recurrent harvestin
 
 Scope notes - harvests anything visible to the given account (any public posts - video and images. Will collect whole account. 
 
-!todo needs caption code change 
-!todo - cull harvest between scope dates. As last modified dates are maintined, use these to filter for date scope.  
+!todo needs caption code change  - see instagram_comments_and_caption__splitter.py
+!todo - cull harvest between scope dates. As last modified dates are maintained, use these as filter for date scope.  
 
 ## tiktok_harvesters.py
 
