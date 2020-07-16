@@ -83,7 +83,7 @@ Upon successful harvest, the harvested content and metadata is put in an agreed 
 
 ### facebook_harvesters.py
 
-Only handles facebook live video. If multiple videos are wanted, its best to run a custom harvest and hand off a list of video URLS. 
+Currently only handles facebook video. If multiple videos are wanted, its best to run a custom harvest and hand off a list of video URLS. 
 
 Requires the `fbdown` tool to be accessible to the calling machine commandline: https://pydoc.net/fb-down/1.0.1/fbdown/
 
