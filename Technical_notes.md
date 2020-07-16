@@ -127,7 +127,7 @@ Scope notes - Only harvests the given URL. #todo - check the products.
 
 If multiple videos are requested, this must be called mutiple times. 
 
-N.B. There is a manual method for getting all the video urls from an account. In a browser, open the facebook page for the video feeds, manually scroll until the date range of videos required is visible in the browser. Save this browser page as an HTML file. Use the included facebook_video_url_parser.py file to get a list of video urls. Feed them to the same process. This isn't included in the harvester as a method yet because of the manual step needed to surface the urls html.  
+N.B. There is a manual method for getting all the video urls from an account. In a browser, open the facebook page for the video feeds, manually scroll until the date range of videos required is visible in the browser. Save this browser page as an HTML file. Use the included facebook_video_url_parser.py file to get a list of video urls. Feed them to the same process. This isn't included in the harvester as a method yet because of the manual step needed to surface the urls html.  See https://github.com/jayGattusoNLNZ/harvester_manager/blob/master/work_in_progress/manual_method_for_facebook_video.py
 
 ## insta_harvesters.py
 
