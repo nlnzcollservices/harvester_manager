@@ -17,7 +17,7 @@ from api import api_key
 
 youtube = build('youtube',"v3", developerKey=api_key)
 
-agent_name = "youtube_harvesters"
+agent_name = "youtube_harvesters_1"
 
 def get_video(item):
 
@@ -94,6 +94,7 @@ def get_channel(item):
 	except:
 		os.chdir(cwd)
 		item.completed = False
+	print(item.completed)
 	return item
 
 def get_playlist(item):
@@ -138,6 +139,7 @@ def get_playlist(item):
 		print(str(e))
 		os.chdir(cwd)
 		item.completed = False
+	print(item.completed)
 	return item
 
 def get_user(item):
@@ -201,6 +203,7 @@ def get_user(item):
 		print(str(e))
 		os.chdir(cwd)
 		item.completed = False
+	print(item.completed)
 	return item
 
 def filter_user_video_by_date(all_video_ids, archived_start_date):
@@ -213,8 +216,6 @@ def filter_user_video_by_date(all_video_ids, archived_start_date):
 		video_ids (list) - contains all individual video ids to collect
 
 	"""
-
-
 	video_ids = []
 	for vidid in all_video_ids:
 		try:
