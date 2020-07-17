@@ -234,66 +234,67 @@ Uses youtube_dl from within Python. See https://pypi.org/project/youtube_dl/
 `get_channel(item)`
 
 At version: `vimeo_harvesters_get_channel`  
-!todo version agent_name properly
-!todo needs general clean up / code review 
+!todo version agent_name properly - done SK
+!todo needs general clean up / code review - somehow done SK
 
-Takes channel as URL from `item`, and scrapes all videos visible to youTube-dl (public videos). 
+Takes channel as URL from `item`, and scrapes all videos visible to youtube-dl (public videos). 
 
-Scope notes - !todo
+Scope notes - takes channel URL, uses youtube-dl to find video IDs, and checks if each video date is later than `archive_start_date`. Then downloads each video and its metadata by video ID with youtube-dl, and puts video and metadata in json format in a folder with name equal to video ID. It also creates a CSV report file at the same level as the video folders: each row contains project ID, video ID, date and "True" or "False" for metadata for each attempt. Sets `item.collected=True` if fully collected and not recurring.
 
 `get_video(item)`
 
 At version: `vimeo_harvesters_get_video`  
-!todo version agent_name properly
+!todo version agent_name properly - done SK
 !todo needs general clean up / code review 
 
-Takes video as URL from `item`, and scrapes video if visible to youTube-dl (public videos). 
+Takes video as URL from `item`, and scrapes video if visible to youtube-dl (public videos). 
 
-Scope notes - !todo comments? 
+Scope notes - takes URL, gets video ID, and downloads video and metadata by video ID with youtube-dl. It puts the video and metadata in json format in a folder with a name equals to video ID. It also creates a CSV report file at the same level as the video folder: contains project ID, video ID, date and "True" or "False" for metadata for each attempt. Sets `item.collected=True` if collected.
+
+!todo comments? 
 
 ### youtube_harvesters.py
 
-Uses youtube_dl from within Python. See https://pypi.org/project/youtube_dl/ and some HTML scraping to get IDs. 
+Uses [youtube_dl](https://pypi.org/project/youtube_dl/) from within Python, the [YouTube API](https://developers.google.com/youtube/v3) for metadata and some HTML scraping with [Selenium](https://selenium-python.readthedocs.io/getting-started.html) and [ChromeDriver](https://chromedriver.chromium.org/) to get video IDs. 
 
+Comments - Comments can be disabled or video and metadata not available for particular day and could be picked up later. 
 
 `get_video(item)`
 
 At version: `youtube_harvesters_get_video`  
-!todo version agent_name properly
-!todo needs general clean up / code review 
+!todo version agent_name properly  
+!todo needs general clean up / code review  
 
-Takes video as URL from `item`, and scrapes video if visible to youTube-dl (public videos). 
+Takes video as URL from `item`, and scrapes video if visible to youtube-dl (public videos). 
 
-Scope notes - !todo comments? 
-
+Scope notes - takes URL, and then downloads the video with youtube-dl and the metadata and comments with the YouTube API, puts video and metadata and comments (if any) in json format in a folder with name equal to video ID. It also creates a CSV report file at the same level as the video folder: contains project ID, video ID, date and "True" or "False" for video, metadata and comments for each attempt. Sets `item.collected=True` if collected.
 
 `get_channel(item)`
 
 At version: `youtube_harvesters_get_channel`  
-!todo version agent_name properly
-!todo needs general clean up / code review 
+!todo version agent_name properly  
+!todo needs general clean up / code review  
 
 Takes channel as URL from `item`, and scrapes all videos visible to youTube-dl (public videos). 
 
-Scope notes - !todo comments? 
+Scope notes - takes channel URL, uses YouTube API to find video IDs, and checks if each video date is later then `archive_start_date`. It then downloads each video with youtube-dl and the metadata and comments with the YouTube API, puts each video with metadata and comments (if any) in json format in a folder with name equal to video ID. It also creates a CSV report file at the same level as the video folders: each row contains project ID, video ID, date and "True" or "False" for video, metadata and comments for each attempt. Sets `item.collected=True` if fully collected and not recurring.
 
 `get_playlist(item)`
 
 At version: `youtube_harvesters_get_playlist`  
-!todo version agent_name properly
-!todo needs general clean up / code review 
+!todo version agent_name properly  
+!todo needs general clean up / code review  
 
 Takes playlist as URL from `item`, and scrapes all videos visible to youTube-dl (public videos). 
 
-Scope notes - !todo
-
+Scope notes - takes playlist URL, uses YouTube API to find video IDs, and checks if each video date is later then `archive_start_date`. It then downloads each video with youtube-dl and the metadata and comments with the YouTube API, puts each video with metadata and comments (if any) in json format in a folder with name equal to video ID. It also creates a CSV report file at the same level as the video folders: each row contains project ID, video ID, date and "True" or "False" for video, metadata and comments for each attempt. Sets `item.collected=True` if fully collected and not recurring.
 
 `get_user(item)`
 
 At version: `youtube_harvesters_get_user`  
-!todo version agent_name properly
-!todo needs general clean up / code review 
+!todo version agent_name properly  
+!todo needs general clean up / code review  
 
 Takes user as URL from `item`, and scrapes all videos visible to youTube-dl (public videos). 
 
-Scope notes - !todo comments? 
+Scope notes - takes user account URL, uses Selenium and ChromeDriver to find video IDs, and checks if each video date is later then `archive_start_date`. It then downloads each video with youtube-dl and the metadata and comments with the YouTube API, puts each video with metadata and comments (if any) in json format in a folder with name equal to video ID. It also creates a CSV report file at the same level as the video folders: each row contains project ID, video ID, date and "True" or "False" for video, metadata and comments for each attempt. Sets `item.collected=True` if fully collected and not recurring.
