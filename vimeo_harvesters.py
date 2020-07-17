@@ -10,9 +10,7 @@ import sys
 from datetime import datetime as dt
 from datetime import timezone
 sys.path.insert(0, r'C:\Source\secrets_and_credentials')
-
-agent_name = "vimeo_harvesters"
-
+agent_name = "vimeo_harvesters_1"
 
 def get_channel(item):
 
@@ -42,24 +40,15 @@ def get_channel(item):
 					'quiet': True
 					}
 		ydl = youtube_dl.YoutubeDL(ydl_opts)
-
-
-		result = ydl.extract_info(
-											url,
-											download = False
-											)
-
-		if 'entries' in result:
-			
+		result = ydl.extract_info(url, download = False)
+		if 'entries' in result:	
 			videos = result ['entries']
-	
 		print(len(videos))
 		for video in videos:
 			print(video)
 			vidid = video["id"]
 			print(vidid)
 			if not vidid in video_ids:
-				
 				upload_date = video["upload_date"]
 				print(upload_date)
 				if not item.archived_start_date or upload_date > item.archived_start_date:
@@ -74,8 +63,6 @@ def get_channel(item):
 	return item
 
 def get_video(item):
-	print("Vimeo video")
-	print(item.id)
 
 	"""
 	Managing collecting of single video
@@ -84,6 +71,8 @@ def get_video(item):
 	Returns:
 		item (obj) - contains row data from spreadsheet with "completed" set True or False
 	"""
+	print("Vimeo video")
+	print(item.id)
 	url = item.url
 	item.agent_name = agent_name+"_get_video"
 	storage_folder = item.storage_folder
@@ -96,15 +85,12 @@ def get_video(item):
 			url = url[:-1]
 		video_ids= [url.split('/')[-1]]
 		video_collector(video_ids, storage_folder, item.id)
-
 		os.chdir(cwd)
 		item.completed = True
 	except:
 		os.chdir(cwd)
 		item.completed = False
 	return item
-
-
 
 def video_collector(video_ids, storage_folder ,id):
 
@@ -116,8 +102,6 @@ def video_collector(video_ids, storage_folder ,id):
 		id(str) - unique identifier
 	Returns:
 		flag (bool) - true if everything collected, false if any error
-
-
 	"""
 	print(video_ids)
 	storage_folder = "."
@@ -133,11 +117,7 @@ def video_collector(video_ids, storage_folder ,id):
 		url = "https://vimeo.com/"+vidid
 		ydl = youtube_dl.YoutubeDL({'outtmpl':os.path.join(storage_folder,vidid,'%(id)s.%(ext)s')})
 		try:
-
-			result = ydl.extract_info(
-												url,
-												download = True
-												)
+			result = ydl.extract_info(url, download = True)
 			print("checking entries")
 			if 'entries' in result:
 				print("here entries")
@@ -148,9 +128,6 @@ def video_collector(video_ids, storage_folder ,id):
 			with open(os.path.join(storage_folder,vidid, vidid+'.json'), 'w') as json_file:
 				json.dump(videos, json_file)
 			print("done")
-
-
-
 		except Exception as e:
 			print(str(e))
 			with open(os.path.join(storage_folder,id,'errors_{}.txt'.format(dt.now().strftime('%Y%m%d'))), "a") as f:
@@ -164,22 +141,16 @@ def video_collector(video_ids, storage_folder ,id):
 				csv_row.append('True')
 		else:
 			csv_row.append("False")
-
-		print(csv_row)
 		csv_rows.append(csv_row)
 	print(csv_rows)
 	print(os.path.join(storage_folder, id+'.csv'))
 	with open (os.path.join(storage_folder, id+'.csv'), 'a') as f:
 		csv_writer = csv.writer(f, quoting=csv.QUOTE_NONE)
 		csv_writer.writerows(csv_rows)
-	
 	return flag
-	
 
 def main():
 	pass
-
-
 
 if __name__ == '__main__':
 	main()	
