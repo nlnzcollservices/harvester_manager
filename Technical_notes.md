@@ -228,28 +228,31 @@ Uses youtube_dl from within python. See https://pypi.org/project/youtube_dl/
 `get_channel(item)`
 
 At version: "vimeo_harvesters_get_channel" 
-!todo version agent_name properly
-!todo needs general clean up / code review 
+!todo version agent_name properly - done SK
+!todo needs general clean up / code review - somehow done SK
 
 Takes channel as URL from `item`, and scrapes all videos visible to youTube-dl (public videos). 
 
-Scope notes - !todo
+Scope notes -  takes channel url, uses youtube-dl to find video ids, checks if video date is later than archive_start_date and then downloads each video and metadata by video id with youtube-dl, puts video and metadata in json format in a folder with name equals  to video id and report csv file, each row of which conrains project id, video id, date and "True" or "False" for metadata for each attempt, on the same level with the multiple video folders. Sets item.collected True if fully collected and not recurring.
+
 
 `get_video(item)`
 
 At version: "vimeo_harvesters_get_video" 
-!todo version agent_name properly
+!todo version agent_name properly -done SK
 !todo needs general clean up / code review 
 
 Takes video as URL from `item`, and scrapes video if visible to youTube-dl (public videos). 
 
-Scope notes - !todo comments? 
+Scope notes -  takes url, gets video id, downloads video and metadata by video id with youtube-dl, puts video and metadata in json format in a folder with a name equals to video id and report csv file, which conrains project id, video id, date and "True" or "False" for metadata for each attempt, on the same level with the individual video folder. Sets item.collected True if collected.
 
 ## youtube_harvesters.py
 
-Uses youtube_dl from within python. See https://pypi.org/project/youtube_dl/ and some html scraping to get IDs. 
 
+Uses youtube_dl from within python. See https://pypi.org/project/youtube_dl/. Youtube API https://developers.google.com/youtube/v3 for metadata and sometimes html  scraping  with selenium https://selenium-python.readthedocs.io/getting-started.html and chromedriver https://chromedriver.chromium.org/ to get IDs from user account.
 
+Comments - Comments can be disabled or video and metadata not available for particular day and could be picked up later. 
+            
 `get_video(item)`
 
 At version: "youtube_harvesters_get_video" 
@@ -258,7 +261,8 @@ At version: "youtube_harvesters_get_video"
 
 Takes video as URL from `item`, and scrapes video if visible to youTube-dl (public videos). 
 
-Scope notes - !todo comments? 
+Scope notes - takes url, and then downloads the video with youtube-dl and metadata and comments with youtube API, puts video and metadata and comments if any in json format in a folder with name equals  to video id and report csv file, conrains project id, video id, date and "True" or "False" for video, metadata and comments for each attempt, on the same level with the video folder.
+Sets item.collected True if collected.
 
 
 `get_channel(item)`
@@ -269,7 +273,8 @@ At version: "youtube_harvesters_get_channel"
 
 Takes channel as URL from `item`, and scrapes all videos visible to youTube-dl (public videos). 
 
-Scope notes - !todo comments? 
+Scope notes - takes channel url, uses youtube API to find video ids, checks if video date is later then archive_start_date and then downloads each video with youtube-dl and metadata and comments with youtube API, puts each video and metadata and comments if any in json format in a folder with name equals to video id and report csv file, each row of conrains project id, video id, date and "True" or "False" for video, metadata and comments for each attempt, on the same level with the multiple video folders. Sets item.collected True if fully collected and not recurring.
+
 
 `get_playlist(item)`
 
@@ -279,7 +284,7 @@ At version: "youtube_harvesters_get_playlist"
 
 Takes playlist as URL from `item`, and scrapes all videos visible to youTube-dl (public videos). 
 
-Scope notes - !todo
+Scope notes - takes url, uses youtube API to find video ids, checks if video date is later then archive_start_date and then downloads each video with youtube-dl and metadata and comments with youtube API, puts each video and metadata and comments if any in json format in a folder with name equals to video id and report csv file, each row of conrains project id, video id, date and "True" or "False" for video, metadata and comments for each attempt, on the same level with the multiple video folders. Sets item.collected True if fully collected and not recurring.
 
 
 `get_user(item)`
@@ -290,4 +295,5 @@ At version: "youtube_harvesters_get_user"
 
 Takes user as URL from `item`, and scrapes all videos visible to youTube-dl (public videos). 
 
-Scope notes - !todo comments? 
+Scope notes - takes url, uses selenium and chromedriver to find video ids, checks if video date is later then archive_start_date and then downloads each video with youtube-dl and metadata and comments with youtube API, puts each video and metadata and comments if any in json format in a folder with name equals to video id and report csv file, each row of conrains project id, video id, date and "True" or "False" for video, metadata and comments for each attempt, on the same level with the multiple video folders. Sets item.collected True if fully collected and not recurring.
+
