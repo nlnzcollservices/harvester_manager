@@ -7,19 +7,11 @@ import requests
 import youtube_dl
 import dateparser
 import sys
-# from bs4 import BeautifulSoup as bs
-# from selenium import webdriver
-# from apiclient.discovery import build
 from datetime import datetime as dt
 from datetime import timezone
 sys.path.insert(0, r'C:\Source\secrets_and_credentials')
-# from api import api_key
-
-# youtube = build('youtube',"v3", developerKey=api_key)
 
 agent_name = "vimeo_harvesters"
-
-
 
 
 def get_channel(item):
@@ -62,16 +54,13 @@ def get_channel(item):
 			videos = result ['entries']
 	
 		print(len(videos))
-		print("here21")
 		for video in videos:
 			print(video)
-			print("here23")
 			vidid = video["id"]
 			print(vidid)
 			if not vidid in video_ids:
 				
 				upload_date = video["upload_date"]
-				print("here22")
 				print(upload_date)
 				if not item.archived_start_date or upload_date > item.archived_start_date:
 					video_ids.append(vidid)
@@ -132,7 +121,6 @@ def video_collector(video_ids, storage_folder ,id):
 	"""
 	print(video_ids)
 	storage_folder = "."
-	#ydl = youtube_dl.YoutubeDL({'outtmpl':os.path.join(storage_folder,'%(id)s.%(ext)s')})
 	flag = True
 	csv_rows = []
 	for vidid in video_ids:
@@ -183,7 +171,6 @@ def video_collector(video_ids, storage_folder ,id):
 	print(os.path.join(storage_folder, id+'.csv'))
 	with open (os.path.join(storage_folder, id+'.csv'), 'a') as f:
 		csv_writer = csv.writer(f, quoting=csv.QUOTE_NONE)
-		#csv_writer.writerow (["Id","Video id","Date Time", "Video", "Metadata", "Comments"]) # write header
 		csv_writer.writerows(csv_rows)
 	
 	return flag
