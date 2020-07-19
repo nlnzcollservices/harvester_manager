@@ -108,12 +108,12 @@ The structure of harvested content should follow this pattern:
 This also massively helps deduping.
 
 ## The harvesters
-[Facebook](#facebook_harvesterspy)  
-[Instagram](#insta_harvesterspy)  
-[TikTok](#tiktok_harvesterspy)  
-[Twitter](#twitter_harvesterspy)  
-[Vimeo](#vimeo_harvesterspy)  
-[YouTube](#youtube_harvesterspy)  
+[Facebook](#facebook_harvesterspy)  - See https://github.com/jayGattusoNLNZ/harvester_manager/blob/master/facebook_harvesters.py
+[Instagram](#insta_harvesterspy)  - See https://github.com/jayGattusoNLNZ/harvester_manager/blob/master/insta_harvesters.py
+[TikTok](#tiktok_harvesterspy)  - See https://github.com/jayGattusoNLNZ/harvester_manager/blob/master/tiktok_harvesters.py
+[Twitter](#twitter_harvesterspy)  - see https://github.com/jayGattusoNLNZ/harvester_manager/blob/master/twitter_harvesters.py
+[Vimeo](#vimeo_harvesterspy)  - See https://github.com/jayGattusoNLNZ/harvester_manager/blob/master/vimeo_harvesters.py
+[YouTube](#youtube_harvesterspy)  - See https://github.com/jayGattusoNLNZ/harvester_manager/blob/master/youtube_harvesters.py
 
 ### facebook_harvesters.py
 
@@ -139,11 +139,11 @@ N.B. There is a manual method for getting all the video URLs from an account. In
 
 At version `insta_harvesters_1`
 
-!todo put harvested videos in proper content structure for both harvesters 
-!todo add in the comments/caption harvester - code exists [here] - needs blending in and structure agreed. 
-!todo needs a get_item method.
+!todo put harvested videos in proper content structure for both harvesters   
+!todo add in the comments/caption harvester - code exists [here] - needs blending in and structure agreed.   
+!todo needs a get_item method.  
 
-`get_line(item)`
+`get_live(item)`
 
 Takes the the `item.url` and hands it to the `pyinstalive` tool in commandline via `subproc`
 
