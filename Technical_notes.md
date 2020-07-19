@@ -107,6 +107,55 @@ The structure of harvested content should follow this pattern:
 5. Any additional content collected as part of an item harvest is placed in the child folder, and sensibly labelled. Pay attention to repeated harvests, and how items contents like 'comments' or informational blocks like a "tweet" may change. Use a combination of item ID, a hint keyword, and datetime stamp in filenames to ensure that no item is accidentally over written. e.g.  `.\1000991\tehEEHS23\tehEEHS23_comments_dd-mm-yyyy.json` or `.\1000991\tehEEHS23\tehEEHS23_errors_dd-mm-yyyy.log`
 This also massively helps deduping.
 
+## a properly populated Item() class object
+
+The manaager script is responsible for instantiating a new `item()` python class object for each row it is processing. This `item` is passed to the harvester module and returned  at the end. It can be added to inside the harvester, and is extensible from the manager if needed. To ensure proper interaction with the harvesters, the following data objects should be considered the minimum for a properly formatted `item()` that a havester is able to process. 
+
+The data items are set at instanciation - even if `None` or unknown, by the manager script. 
+
+The below describes when the essential data are expected, and what with.  
+
+### Manditory at instantiation
+ 
+    item.id # string 
+Unique identifer - used to track the item betoween the sheet and content storage
+
+    item.url # string  
+The URL the harvester is expected to harvest. This might a single piece of content, or a root account URL that is expected.
+
+    item.storage_location # string
+ The root folder location content is expected to be found in after a successful harvest.    
+   
+    item.date_range # None or datetime.date
+Used to filter harvests by scoped dates. 
+
+    item.ready #  Controlled list of strings ['y', 'n', '?']
+Used by the manager to know if the item needs to be sent to harvester
+
+    item.content_type # Controlled list of strings (see readme.md)
+Used by the manager to know what harvester module to envoke 
+
+    item.reccuring # Controlled list of strings ['y', 'n']
+Used by harvester to know if it should revisit content.  
+   
+### Manditory at succesful completion of harvest 
+
+    item.agent_name # string
+A string identifer that is used to populate the spreadsheet to ensure collection scope can be tied to a harvester module version.
+
+    item.completed # bool
+Set to `True` by harvester when harvest succesful. Used by the manager to direct post harvest actions / writes to spreadsheet. Written to the spreadsheet by the manager -as a controlled list of strings ['y', 'n']. 
+
+    item.archived_start_date
+Set to when the content was harvested. Written to the spreadsheet by the manager
+
+    item.responsible # string (conttolled list - see item.agent_name)
+A string identifer that is used to populate the spreadsheet to ensure collection scope can be tied to a harvester module version. Written to the spreadsheet by the manager.
+
+
+For full class definition see `item()` class in https://github.com/jayGattusoNLNZ/harvester_manager/blob/master/beta_2_manager.py
+
+
 ## The harvesters
 [Facebook](#facebook_harvesterspy)  - See https://github.com/jayGattusoNLNZ/harvester_manager/blob/master/facebook_harvesters.py  
 [Instagram](#insta_harvesterspy)  - See https://github.com/jayGattusoNLNZ/harvester_manager/blob/master/insta_harvesters.py  
