@@ -92,9 +92,9 @@ All harvesters have to follow the same pattern:
 
 The storage location for any content must be carefully chosen. 
 
-Be aware of overwriting any content if items are harvested repeatedly. 
-Be aware of moving content around after harvest - use archivally 'safe' moving tools like rsync, collection harmoniser (https://github.com/jayGattusoNLNZ/files_harmoniser), or safemover (https://github.com/NLNZDigitalPreservation/Safe_mover). 
-Be aware of the volume you might collect. These tools can collect large volumes of data - make sure you have sufficent local / final storage. 
+Be aware of overwriting any content if items are harvested repeatedly.  
+Be aware of moving content around after harvest - use archivally 'safe' moving tools like rsync, collection harmoniser (https://github.com/jayGattusoNLNZ/files_harmoniser), or safemover (https://github.com/NLNZDigitalPreservation/Safe_mover).  
+Be aware of the volume you might collect. These tools can collect large volumes of data - make sure you have sufficent local / final storage.  
 
 The structure of harvested content should follow this pattern:
 
@@ -108,12 +108,12 @@ The structure of harvested content should follow this pattern:
 This also massively helps deduping.
 
 ## The harvesters
-[Facebook](#facebook_harvesterspy)  - See https://github.com/jayGattusoNLNZ/harvester_manager/blob/master/facebook_harvesters.py
-[Instagram](#insta_harvesterspy)  - See https://github.com/jayGattusoNLNZ/harvester_manager/blob/master/insta_harvesters.py
-[TikTok](#tiktok_harvesterspy)  - See https://github.com/jayGattusoNLNZ/harvester_manager/blob/master/tiktok_harvesters.py
-[Twitter](#twitter_harvesterspy)  - see https://github.com/jayGattusoNLNZ/harvester_manager/blob/master/twitter_harvesters.py
-[Vimeo](#vimeo_harvesterspy)  - See https://github.com/jayGattusoNLNZ/harvester_manager/blob/master/vimeo_harvesters.py
-[YouTube](#youtube_harvesterspy)  - See https://github.com/jayGattusoNLNZ/harvester_manager/blob/master/youtube_harvesters.py
+[Facebook](#facebook_harvesterspy)  - See https://github.com/jayGattusoNLNZ/harvester_manager/blob/master/facebook_harvesters.py  
+[Instagram](#insta_harvesterspy)  - See https://github.com/jayGattusoNLNZ/harvester_manager/blob/master/insta_harvesters.py  
+[TikTok](#tiktok_harvesterspy)  - See https://github.com/jayGattusoNLNZ/harvester_manager/blob/master/tiktok_harvesters.py  
+[Twitter](#twitter_harvesterspy)  - see https://github.com/jayGattusoNLNZ/harvester_manager/blob/master/twitter_harvesters.py  
+[Vimeo](#vimeo_harvesterspy)  - See https://github.com/jayGattusoNLNZ/harvester_manager/blob/master/vimeo_harvesters.py  
+[YouTube](#youtube_harvesterspy)  - See https://github.com/jayGattusoNLNZ/harvester_manager/blob/master/youtube_harvesters.py  
 
 ### facebook_harvesters.py
 
