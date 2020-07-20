@@ -163,7 +163,9 @@ def get_user(item):
 		os.chdir(item.storage_folder)
 		link_list = []	
 		all_video_ids = []
-		driver=webdriver.Chrome()
+		# driver=webdriver.Chrome()
+		# driver.get(item.url)
+		driver = webdriver.Firefox()
 		driver.get(item.url)
 		offset = 0
 		driver.maximize_window()

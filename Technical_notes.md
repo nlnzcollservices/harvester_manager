@@ -346,4 +346,9 @@ At version: `youtube_harvesters_get_user`
 
 Takes user as URL from `item`, and scrapes all videos visible to youTube-dl (public videos). 
 
-Scope notes - takes user account URL, uses Selenium with ChromeDriver (current version available on https://chromedriver.chromium.org/ on 13.02.2020) to open youtube user page and scroll it automatically 10 times for this process to scrape all video IDs of the user via Beautuful Soup. Checks if each video date is later then `archive_start_date`. It then downloads each video with youtube-dl and the metadata and comments with the YouTube API, puts each video with metadata and comments (if any) in json format in a folder with name equal to video ID. It also creates a CSV report file at the same level as the video folders: each row contains project ID, video ID, date and "True" or "False" for video, metadata and comments for each attempt. Sets `item.collected=True` if fully collected and not recurring.
+Scope notes - takes user account URL, uses Selenium to open youtube user page and scroll it automatically 10 times for this process to scrape all video IDs of the user via Beautuful Soup. Checks if each video date is later then `archive_start_date`. It then downloads each video with youtube-dl and the metadata and comments with the YouTube API, puts each video with metadata and comments (if any) in json format in a folder with name equal to video ID. It also creates a CSV report file at the same level as the video folders: each row contains project ID, video ID, date and "True" or "False" for video, metadata and comments for each attempt. Sets `item.collected=True` if fully collected and not recurring.
+
+Selenium is working with FireFox webdriver geckodriver-v0.26.0-win32.zip from https://github.com/mozilla/geckodriver/releases. It also could be set to work with a Chrome webdriver https://chromedriver.chromium.org/downloads with # driver=webdriver.Chrome() in 'yourube_harvesters.py' script line uncommented.
+ 
+
+
