@@ -348,17 +348,17 @@ def video_collector(video_ids, storage_folder ,id):
 		else:
 			csv_row.append("False")
 		print(csv_row)
-		with open(os.path.join(storage_folder, vidid, vidid+'.json'), 'w') as json_file:
+		with open(os.path.join(storage_folder, vidid, vidid+'{}.json'.format(dt.now().strftime('%Y%m%d'))), 'w') as json_file:
 			json.dump(res, json_file)
 		try:
 			comments = get_video_comments(youtube, part='snippet', videoId=vidid)
-			with open(os.path.join(storage_folder, vidid, vidid+'_comments.json'), 'w') as json_file:
+			with open(os.path.join(storage_folder, vidid, vidid+'_comments_{}.json'.format(dt.now().strftime('%Y%m%d'))), 'w') as json_file:
 				json.dump(comments, json_file)
 
 		except Exception as e:
 			print(str(e))
 			print(vidid)
-			with open(os.path.join(storage_folder, vidid,'errors_{}.txt'.format(dt.now().strftime('%Y%m%d'))), "a") as f:
+			with open(os.path.join(storage_folder, vidid,'errors_{}.txt '.format(dt.now().strftime('%Y%m%d'))), "a") as f:
 				f.write(vidid + "|" + id + " " + str(e) )
 				f.write("\n")
 		
