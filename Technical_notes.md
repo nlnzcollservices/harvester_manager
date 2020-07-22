@@ -27,9 +27,10 @@ Currently: `beta_2_manager.py`
 4. Build in way of calling any harvester independently (see `main()` in `twitter_harvesters.py` for basic approach\).
 5. Fix the confusion over `self.storage_folder` and `self.storage_location` in `Item()`
 6. Fix all the harvesters so they properly follow the agreed harvest content structure. This requirement was a late addition, so some earlier harvesters do not adhere to the rules. Assume any v1 harvester needs to be cleaned up. 
-7. Clean up the way date ranges are handled across the manager/harvester boundary, in each harvester, and reported on in the sheet
+7. Clean up the way date ranges are handled across the manager/harvester boundary, in each harvester, and reported on in the sheet - and fixing the date range function for all harevsters (make it manditory even if it start from the year 0). 
 8. Build in a way of calling each harvester individually, perhaps with a simple UI.
-
+9. Add in collection level logging in the parent folder. A csv file that lists the principle assets / data to help with content assessment and even access (search / summary copies)
+10. Plug in a SIP packager step at the end to aid rapid ingest. 
 
 ### Notes
 
