@@ -17,6 +17,16 @@ except configparser.NoOptionError:
 
 
 def get_live(item):
+	"""
+	Gets any instagram "live" video from a given instagram account name
+	Has 2 steps: 
+	1. Attemps to download video binary from the account name via the pyinstalive (commandline call)
+	https://github.com/tinymoss/PyInstaLive
+	2. Updates the item() data object
+	
+	todo
+	Resulting data needs to reshaped into standardised format
+	"""
 	url = item.url
 	storage_location = item.storage_location
 	item.agent_name = agent_name+"-get_live"
@@ -38,6 +48,19 @@ def get_live(item):
 	return item
 
 def get_account(item):
+	"""
+	Gets any instagram account from a given instagram account name
+	Has 2 steps: 
+	1. Attemps to download video binary from the account name via the instagram-scraper tool (commandline call)
+	https://github.com/arc298/instagram-scraper
+	2. Updates the item() data object
+	
+	todo
+	Resulting data needs to reshaped into standardised format
+	Get captions / comments - See work in progress folder in this git
+	Do date range filtering
+	"""
+	
 	url = item.url
 	storage_location = item.storage_location
 	item.agent_name = agent_name+"-get_account"
