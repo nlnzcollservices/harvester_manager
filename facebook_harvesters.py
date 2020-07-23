@@ -4,6 +4,18 @@ import os
 agent_name = "facebook_harvesters_1"
 
 def get_video(item):
+	"""
+	Gets a single video from a given facebook video page URL
+	Has 3 steps. 
+	1. Attempts to find facebook video ID from given URL, 
+	2. Attemps to download that video binary from the video id via the fbdown tool (commandline call)
+	https://tbhaxor.github.io/fbdown/
+	3. Updates the item() data object
+	
+	todo
+	Resulting data needs to reshaped into standardised format
+	URL cleanup could be better
+	"""
 	try:
 		url = item.url
 		storage_location = item.storage_location
