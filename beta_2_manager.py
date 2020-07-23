@@ -21,7 +21,6 @@ from youtube_harvesters import get_playlist as youtube_get_playlist
 from vimeo_harvesters import get_video as vimeo_get_video
 from vimeo_harvesters import get_channel as vimeo_get_channel
 
-# project_folder = "\\".join(os.getcwd().split('\\')[:-1])
 sys.path.insert(0, r'C:\Source\secrets_and_credentials')
 script_folder = os.getcwd()
 secrets_and_credentials_fold = r"C:\Source\secrets_and_credentials"
@@ -31,9 +30,6 @@ config.read(sprsh_file)
 
 ## credentials
 sprsh = config.get("configuration","sprsh")
-
-
-
 credential_file = os.path.join(secrets_and_credentials_fold, "credentials")
 client_secrets_file = os.path.join(secrets_and_credentials_fold, "client_secrets.json")
 store = file.Storage(client_secrets_file )
@@ -62,8 +58,16 @@ else:
 	with open('my_content_types.txt') as data:
 		my_content_types = [x for x in data.read().split('\n') if x != ""]
 
-
 class Item():
+	"""
+	This is the exchange object that is passed between the manager script, and the harvesters.
+	There is a minimum population of data thats described in the technical_notes.md file in the git
+	Its designed to be extensible - if there is data a harvester needs to undertake the harvest thats user supplied 
+	it should be in this data object and not set in the harvester. 
+	Its generated from a row of the linked spreadsheet and has some minor additional derived data
+	Its return from the harvester with a storage location string (actaully a confirmation of sorts the data exists at instanciaton)
+	and a complete (True|False) flag   
+	"""
 	def __init__(self, row, row_number):
 		self.id = row[0]
 		self.description = row[1]
@@ -100,13 +104,20 @@ class Item():
 
 
 def item_parser(item):
-
+	"""
+	This it function that handles the inferface between the mamanger and harvester. 
+	It takes a properly populated item() class data object and passes it to the approriate harvester based on the contentType string. 
+	New Harvesters are added here. 
+	"""
 	if item.ready == "Y" and item.collected != "Y":
 		if item.content_type == "InstagramAccount" and item.content_type in my_content_types:
+			print (f"working on: {item.id} - {item.content_type}")
 			item = insta_get_account(item)
 		elif item.content_type == "InstagramLive" and item.content_type in my_content_types:
+			print (f"working on: {item.id} - {item.content_type}")
 			item = insta_get_live(item)
 		elif item.content_type == "TiktokVideo" and item.content_type in my_content_types:
+			print (f"working on: {item.id} - {item.content_type}")
 			item = tiktok_get_video(item)
 		elif item.content_type == "FacebookVideo" and item.content_type in my_content_types:
 			print (f"working on: {item.id} - {item.content_type}")
@@ -117,33 +128,38 @@ def item_parser(item):
 		elif item.content_type == "TwitterAccount" and item.content_type in my_content_types:
 			print (f"working on: {item.id} - {item.content_type}")
 			item = twitter_get_account(item)
-
-		# my_harvester = Youtube_harvester(self.data)
-		# elif self.content_type == "InstagramItem" and self.content_type in my_content_types:
-		# 		flag, self.location = instagramm_item()
 		elif item.content_type == "VimeoVideo" and item.content_type in my_content_types:
+			print (f"working on: {item.id} - {item.content_type}")
 			item = vimeo_get_video(item)
 		elif item.content_type == "VimeoChannel" and item.content_type in my_content_types:
+			print (f"working on: {item.id} - {item.content_type}")
 			item = vimeo_get_channel(item)
 		elif item.content_type == "YoutubeVideo" and item.content_type in my_content_types:
+			print (f"working on: {item.id} - {item.content_type}")
 			item = youtube_get_video(item)
 		elif item.content_type == "YoutubeChannel" and item.content_type in my_content_types:
+			print (f"working on: {item.id} - {item.content_type}")
 			item = youtube_get_channel(item)
 		elif item.content_type == "YoutubeUser" and item.content_type in my_content_types:
+			print (f"working on: {item.id} - {item.content_type}")
 			item = youtube_get_user(item)
 		elif item.content_type == "YoutubePlaylist" and item.content_type in my_content_types:
+			print (f"working on: {item.id} - {item.content_type}")
 			item = youtube_get_playlist(item)
-	
-			
-		#print(self.content_type, self.date_range, self.storage_folder)
+		
+		### when the havester is finished it returns the item back to this function
+		### If item.completed is populated True it writes the completion to the sheet 
 		if item.completed:
 			write_to_spreadsheet(item)
 
 def write_to_spreadsheet(item):
 
 	"""
-	Writes to spreadsheet collect, responsible, storage location
-
+	Writes to spreadsheet:
+	collected (bool - item.completed)
+	responsible (string - item.agent_name)
+	storage location (string - item.storage_folder)
+	Date Archived (string -  datetime.now()) 
 	"""
 	ws.update_cell(item.row_number, 12, dt.now().strftime("%d.%m.%Y") )
 	if item.reccuring == "N":
