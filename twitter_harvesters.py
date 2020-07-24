@@ -46,6 +46,10 @@ def filter_tweets_by_start_date(tweets, start_date):
 		return filtered_tweets
 
 def get_tweet(item):
+	"""
+	takes a tweet id and uses the twarc lib to harvest it
+	searches for media in the tweet - if it can find any it also tries to download that media item
+	"""
 	item.agent_name = agent_name+"_1_get_tweet"
 	if not os.path.exists(item.storage_folder):
 		os.makedirs(item.storage_folder)
@@ -67,6 +71,10 @@ def get_tweet(item):
 
 
 def get_account(item):
+	"""
+	Uses the Twarc libtrary to surface all the tweet twarc can see via a twitter username
+	Searches for media in all tweets - if it can find any it also tries to download that media item
+	"""
 	item.agent_name = agent_name+"_1_get_account"
 	if not os.path.exists(item.storage_folder):
 		os.makedirs(item.storage_folder)
@@ -115,12 +123,14 @@ def get_assets(tweet, storage_folder):
 
 def main():
 	pass
+	###example minimum item() class data object for testing 
 	# item = {
 	# 	"url":"https://twitter.com/ndha_nz",
-	# 	"storage_folder":"./junk",
+	# 	"storage_folder":"./my_tweets",
 	# 	"date_range":"01.03.2020"
 	# 	}
-
+	
+	#### eample of how call the harvesters outside of the manager. 
 	# print (item)
 	# get_account(item)
 	# # get_tweet(item)
