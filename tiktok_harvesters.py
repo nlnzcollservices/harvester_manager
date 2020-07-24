@@ -9,6 +9,19 @@ session.headers.update({'User-Agent': 'Custom user agent'})
 agent_name = "tiktok_harvesters_1"
 
 def get_tiktok_video(item):
+	"""
+	Gets a single video from a given facebook video page URL
+	Has 3 steps. 
+	1. Attempts to find facebook video ID from given URL, 
+	2. Attemps to download that video binary from the video id via python
+	https://tbhaxor.github.io/fbdown/
+	3. Updates the item() data object
+	
+	todo
+	Resulting data needs to reshaped into standardised format
+	URL cleanup could be better
+	"""
+	
 	url = item.url
 	storage_location = item.storage_location
 	item.agent_name = agent_name+"_get_video"
