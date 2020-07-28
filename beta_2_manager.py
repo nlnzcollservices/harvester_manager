@@ -21,16 +21,14 @@ from youtube_harvesters import get_playlist as youtube_get_playlist
 from vimeo_harvesters import get_video as vimeo_get_video
 from vimeo_harvesters import get_channel as vimeo_get_channel
 
-sys.path.insert(0, r'C:\Source\secrets_and_credentials')
-script_folder = os.getcwd()
-secrets_and_credentials_fold = r"C:\Source\secrets_and_credentials"
-sprsh_file = os.path.join(secrets_and_credentials_fold, "spreadsheet")
-config = configparser.ConfigParser()
-config.read(sprsh_file)
 
+secrets_and_credentials_fold = 'C:\Source\secrets_and_credentials'
+script_folder = os.getcwd()
+config = configparser.ConfigParser()
+config.read(os.path.join(secrets_and_credentials_fold,"secret"))
+## spreadsheet
+sprsh = config.get("social_media_harvester","google_spreadsheet_key")
 ## credentials
-sprsh = config.get("configuration","sprsh")
-credential_file = os.path.join(secrets_and_credentials_fold, "credentials")
 client_secrets_file = os.path.join(secrets_and_credentials_fold, "client_secrets.json")
 store = file.Storage(client_secrets_file )
 creds = store.get()
