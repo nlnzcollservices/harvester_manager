@@ -6,17 +6,22 @@ import time
 import requests
 import youtube_dl
 import dateparser
+import configparser
 import sys
 from bs4 import BeautifulSoup as bs
 from selenium import webdriver
 from apiclient.discovery import build
 from datetime import datetime as dt
 from datetime import timezone
-sys.path.insert(0, r'C:\Source\secrets_and_credentials')
-from api import api_key
 
+secrets_and_credentials_fold = 'C:\Source\secrets_and_credentials'
+script_folder = os.getcwd()
+config = configparser.ConfigParser()
+config.read(os.path.join(secrets_and_credentials_fold,"secret"))
+
+## google youtube credentials
+api_key = config.get("social_media_harvester","google_youtube_api_key")
 youtube = build('youtube',"v3", developerKey=api_key)
-
 agent_name = "youtube_harvesters_1"
 
 def get_video(item):
