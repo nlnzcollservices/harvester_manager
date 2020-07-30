@@ -341,7 +341,6 @@ Takes playlist as URL from `item`, and scrapes all videos visible to youTube-dl 
 
 Scope notes - takes playlist URL, uses YouTube API to find video IDs, and checks if each video date is later then `archive_start_date`. It then downloads each video with youtube-dl and the metadata and comments with the YouTube API, puts each video with metadata and comments (if any) in json format in a folder with name equal to video ID. It also creates a CSV report file at the same level as the video folders: each row contains project ID, video ID, date and "True" or "False" for video, metadata and comments for each attempt. Sets `item.collected=True` if fully collected and not recurring.
 
-
 `get_user(item)`
 
 At version: `youtube_harvesters_get_user`  
