@@ -14,12 +14,12 @@ from apiclient.discovery import build
 from datetime import datetime as dt
 from datetime import timezone
 
-secrets_and_credentials_fold = 'C:\Source\secrets_and_credentials'
+secrets_and_credentials_fold = 'C:\Source\sercrets_and_credentials'
 script_folder = os.getcwd()
 config = configparser.ConfigParser()
 config.read(os.path.join(secrets_and_credentials_fold,"secret"))
 
-## google youtube credentials
+## google youtube credentials'
 api_key = config.get("social_media_harvester","google_youtube_api_key")
 youtube = build('youtube',"v3", developerKey=api_key)
 agent_name = "youtube_harvesters_1"

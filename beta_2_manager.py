@@ -22,10 +22,11 @@ from vimeo_harvesters import get_video as vimeo_get_video
 from vimeo_harvesters import get_channel as vimeo_get_channel
 
 
-secrets_and_credentials_fold = 'C:\Source\secrets_and_credentials'
+secrets_and_credentials_fold = 'C:\Source\sercrets_and_credentials'
 script_folder = os.getcwd()
 config = configparser.ConfigParser()
 config.read(os.path.join(secrets_and_credentials_fold,"secret"))
+print(os.path.join(secrets_and_credentials_fold,"secret"))
 ## spreadsheet
 sprsh = config.get("social_media_harvester","google_spreadsheet_key")
 ## credentials

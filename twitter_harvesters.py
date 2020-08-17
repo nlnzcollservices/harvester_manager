@@ -9,15 +9,16 @@ from datetime import datetime, timedelta
 from email.utils import parsedate_tz
 import configparser
 
+secrets_and_credentials_fold = 'C:\Source\sercrets_and_credentials'
+script_folder = os.getcwd()
 config = configparser.ConfigParser()
-sprsh_file = r"C:\Source\secrets_and_credentials\spreadsheet"
-config.read(sprsh_file)
+config.read(os.path.join(secrets_and_credentials_fold,"secret"))
 
 try: 
-	twitter_consumer_key = config.get("configuration","twitter_consumer_key")
-	twitter_consumer_secret = config.get("configuration","twitter_consumer_secret")
-	twitter_access_token = config.get("configuration","twitter_access_token")
-	twitter_access_token_secret = config.get("configuration","twitter_access_token_secret")
+	twitter_consumer_key = config.get("social_media_harvester","twitter_consumer_key")
+	twitter_consumer_secret = config.get("social_media_harvester","twitter_consumer_secret")
+	twitter_access_token = config.get("social_media_harvester","twitter_access_token")
+	twitter_access_token_secret = config.get("social_media_harvester","twitter_access_token_secret")
 except configparser.NoOptionError:
 	pass
 
