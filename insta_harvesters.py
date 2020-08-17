@@ -4,13 +4,15 @@ import configparser
 
 agent_name = "insta_harvesters_1"
 
+secrets_and_credentials_fold = 'C:\Source\sercrets_and_credentials'
+script_folder = os.getcwd()
 config = configparser.ConfigParser()
-sprsh_file = r"C:\Source\secrets_and_credentials\spreadsheet"
-config.read(sprsh_file)
+config.read(os.path.join(secrets_and_credentials_fold,"secret"))
 
 try:
-	insta_username = config.get("configuration","insta_user_name")
-	insta_password = config.get("configuration","insta_password")
+	insta_username = config.get("social_media_harvester","insta_user_name")
+	insta_password = config.get("social_media_harvester","insta_password")
+
 except configparser.NoOptionError:
 	pass
 
