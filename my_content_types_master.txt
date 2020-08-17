@@ -3,7 +3,7 @@ InstagramAccount
 InstagramItem
 InstagramLive
 TiktokVideo
-Tweet
+TwitterTweet
 TwitterAccount
 VimeoVideo
 YoutubePlaylistYoutubeChannel
