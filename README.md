@@ -1,3 +1,4 @@
+
 # Social Media Harvest Manager
 
 Harvester Manager is a tool that automates content harvesting from a variety of social platforms. 
