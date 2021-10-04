@@ -10,8 +10,9 @@ import subprocess
 import configparser
 from insta_harvesters import get_live as insta_get_live
 from insta_harvesters import get_account as insta_get_account
-from tiktok_harvesters import get_tiktok_video as tiktok_get_video 
-from facebook_harvesters import get_video as facebook_get_video
+# from tiktok_harvesters_v2 import get_tiktok_video as tiktok_get_video 
+from facebook_harvesters_2 import get_video as facebook_get_video
+from facebook_harvesters_2 import get_videos as facebook_get_videos
 from twitter_harvesters import get_tweet as twitter_get_tweet
 from twitter_harvesters import get_account as twitter_get_account
 from youtube_harvesters import get_video as youtube_get_video
@@ -26,7 +27,7 @@ secrets_and_credentials_fold = 'C:\Source\sercrets_and_credentials'
 script_folder = os.getcwd()
 config = configparser.ConfigParser()
 config.read(os.path.join(secrets_and_credentials_fold,"secret"))
-print(os.path.join(secrets_and_credentials_fold,"secret"))
+#print(os.path.join(secrets_and_credentials_fold,"secret"))
 ## spreadsheet
 sprsh = config.get("social_media_harvester","google_spreadsheet_key")
 ## credentials
@@ -109,6 +110,7 @@ def item_parser(item):
 	New Harvesters are added here. 
 	"""
 	if item.ready == "Y" and item.collected != "Y":
+		print("here")
 		if item.content_type == "InstagramAccount" and item.content_type in my_content_types:
 			print (f"working on: {item.id} - {item.content_type}")
 			item = insta_get_account(item)
@@ -120,7 +122,9 @@ def item_parser(item):
 			item = tiktok_get_video(item)
 		elif item.content_type == "FacebookVideo" and item.content_type in my_content_types:
 			print (f"working on: {item.id} - {item.content_type}")
-			item = facebook_get_video(item)
+		elif item.content_type == "FacebookVideos" and item.content_type in my_content_types:
+			print (f"working on: {item.id} - {item.content_type}")
+			item = facebook_get_videos(item)
 		elif item.content_type == "TwitterTweet" and item.content_type in my_content_types:
 			print (f"working on: {item.id} - {item.content_type}")
 			item = twitter_get_tweet(item)
@@ -177,9 +181,11 @@ def main():
 
 	row_count  = ws.row_count
 	for row_number, row in enumerate(ws.get_all_values()[1:], start = 2):
-		item = Item(row, row_number)
-		item_parser(item)
+		if row_number >184:
+			item = Item(row, row_number)
+			item_parser(item)
 
 if __name__ == "__main__":
 	main()
 
+ch
