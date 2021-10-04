@@ -1,4 +1,5 @@
 FacebookVideo
+FacebookVideos
 InstagramAccount
 InstagramItem
 InstagramLive
