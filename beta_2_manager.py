@@ -10,7 +10,8 @@ import subprocess
 import configparser
 from insta_harvesters import get_live as insta_get_live
 from insta_harvesters import get_account as insta_get_account
-from tiktok_harvesters import get_tiktok_video as tiktok_get_video 
+from tiktok_harvesters_2 import get_tiktok_video as tiktok_get_video
+from tiktok_harvesters_2 import get_tiktok_videos as tiktok_get_videos
 from facebook_harvesters_2 import get_video as facebook_get_video
 from facebook_harvesters_2 import get_videos as facebook_get_videos
 from twitter_harvesters import get_tweet as twitter_get_tweet
@@ -49,9 +50,6 @@ storage_folder_root = "./harvests"
 if not os.path.exists(storage_folder_root):
 	os.makedirs(storage_folder_root) 
 
-### get local content types
-### if you don't have a file in the root folder called 'my_content_types.txt' nothing will process.
-### Use 'my_content_types_master.txt' as a refernce
 if not os.path.exists('my_content_types.txt'):
 	my_content_types = []
 else:
@@ -120,6 +118,9 @@ def item_parser(item):
 		elif item.content_type == "TiktokVideo" and item.content_type in my_content_types:
 			print (f"working on: {item.id} - {item.content_type}")
 			item = tiktok_get_video(item)
+		elif item.content_type == "TiktokVideos" and item.content_type in my_content_types:
+			print (f"working on: {item.id} - {item.content_type}")
+			item = tiktok_get_videos(item)
 		elif item.content_type == "FacebookVideo" and item.content_type in my_content_types:
 			print (f"working on: {item.id} - {item.content_type}")
 		elif item.content_type == "FacebookVideos" and item.content_type in my_content_types:
@@ -181,7 +182,7 @@ def main():
 
 	row_count  = ws.row_count
 	for row_number, row in enumerate(ws.get_all_values()[1:], start = 2):
-		if row_number==184:
+		if row_number:
 			item = Item(row, row_number)
 			item_parser(item)
 
