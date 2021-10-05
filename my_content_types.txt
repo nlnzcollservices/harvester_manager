@@ -4,3 +4,11 @@ YoutubeUser
 YoutubeVideo
 VimeoVideo
 VimeoChannel
+FacebookVideo
+InstagramItem
+InstagramAccount
+InstagramLive
+TwitterTweet
+TwitterAccount
+TiktokVideo
+TiktokVideos
