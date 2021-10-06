@@ -25,7 +25,7 @@ def get_video(item):
 	storage_folder = item.storage_folder
 	flag=True
 	url = item.url
-	vidid=url.split("/")[-1]
+	vidid=url.split("/")[-2]
 	if not os.path.exists(storage_folder):
 		os.makedirs(storage_folder)
 	try:
