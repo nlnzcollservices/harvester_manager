@@ -10,6 +10,7 @@ import subprocess
 import configparser
 from insta_harvesters import get_live as insta_get_live
 from insta_harvesters import get_account as insta_get_account
+from insta_harvesters import get_video as insta_get_video
 from tiktok_harvesters_2 import get_tiktok_video as tiktok_get_video
 from tiktok_harvesters_2 import get_tiktok_videos as tiktok_get_videos
 from facebook_harvesters_2 import get_video as facebook_get_video
@@ -115,6 +116,9 @@ def item_parser(item):
 		elif item.content_type == "InstagramLive" and item.content_type in my_content_types:
 			print (f"working on: {item.id} - {item.content_type}")
 			item = insta_get_live(item)
+		elif item.content_type == "InstagramVideo" and item.content_type in my_content_types:
+			print (f"working on: {item.id} - {item.content_type}")
+			item = insta_get_video(item)
 		elif item.content_type == "TiktokVideo" and item.content_type in my_content_types:
 			print (f"working on: {item.id} - {item.content_type}")
 			item = tiktok_get_video(item)
@@ -122,10 +126,10 @@ def item_parser(item):
 			print (f"working on: {item.id} - {item.content_type}")
 			item = tiktok_get_videos(item)
 		elif item.content_type == "FacebookVideo" and item.content_type in my_content_types:
-			print (f"working on: {item.id} - {item.content_type}")
+			print (f"working osan: {item.id} - {item.content_type}")
 			item = facebook_get_video(item)
 		elif item.content_type == "FacebookVideos" and item.content_type in my_content_types:
-			print (f"working on: {item.id} - {item.content_type}")
+			print (f"working osan: {item.id} - {item.content_type}")
 			item = facebook_get_videos(item)
 		elif item.content_type == "TwitterTweet" and item.content_type in my_content_types:
 			print (f"working on: {item.id} - {item.content_type}")
@@ -183,8 +187,7 @@ def main():
 
 	row_count  = ws.row_count
 	for row_number, row in enumerate(ws.get_all_values()[1:], start = 2):
-		if row_number==167:
-
+		if row_number==170:
 			item = Item(row, row_number)
 			item_parser(item)
 
