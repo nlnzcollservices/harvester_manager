@@ -1,9 +1,10 @@
 FacebookVideo
 FacebookVideos
 InstagramAccount
-InstagramItem
+InstagramVideo
 InstagramLive
 TiktokVideo
+TiktokVideos
 TwitterTweet
 TwitterAccount
 VimeoVideo

@@ -5,7 +5,7 @@ YoutubeVideo
 VimeoVideo
 VimeoChannel
 FacebookVideo
-InstagramItem
+InstagramVideo
 InstagramAccount
 InstagramLive
 TwitterTweet
