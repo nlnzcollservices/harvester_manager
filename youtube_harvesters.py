@@ -10,9 +10,11 @@ import configparser
 import sys
 from bs4 import BeautifulSoup as bs
 from selenium import webdriver
-from apiclient.discovery import build
+#from googleapiclient import discovery
+from googleapiclient.discovery import build
 from datetime import datetime as dt
 from datetime import timezone
+
 
 secrets_and_credentials_fold = 'C:\Source\sercrets_and_credentials'
 script_folder = os.getcwd()
@@ -95,7 +97,7 @@ def get_channel(item):
 		print("go to video collector")
 		flag = video_collector(video_ids, storage_folder, item.id)
 		os.chdir(cwd)
-		item.completed = flag
+		item.completed =True
 	except:
 		os.chdir(cwd)
 		item.completed = False
@@ -165,12 +167,14 @@ def get_user(item):
 		cwd = os.getcwd()
 		if not os.path.exists(item.storage_folder):
 			os.makedirs(item.storage_folder)
+		driver = webdriver.Firefox()
+		time.sleep(3)
 		os.chdir(item.storage_folder)
 		link_list = []	
 		all_video_ids = []
 		# driver=webdriver.Chrome()
 		# driver.get(item.url)
-		driver = webdriver.Firefox()
+		#driver = webdriver.Firefox()
 		driver.get(item.url)
 		offset = 0
 		driver.maximize_window()
@@ -191,7 +195,7 @@ def get_user(item):
 				time.sleep(1)
 				offset+=height
 				html = driver.page_source
-				soup = bs(html)
+				soup = bs(html, "lxml")
 				all_youtube_links = soup.findAll({"a":{"id":"video-title"}})
 				for el in all_youtube_links:
 					if "href" in el.attrs.keys() and "/watch?v=" in el.attrs["href"] and not "&" in el.attrs["href"]:
@@ -200,7 +204,9 @@ def get_user(item):
 		all_video_ids = list(set(all_video_ids))
 		driver.close()
 		if item.archived_start_date:
+			print("here1")
 			video_ids = filter_user_video_by_date(all_video_ids, item.archived_start_date)
+			print("here2")
 		else:
 			video_ids = all_video_ids
 		flag = video_collector(video_ids, item.storage_folder, item.id)
@@ -224,6 +230,7 @@ def filter_user_video_by_date(all_video_ids, archived_start_date):
 
 	"""
 	video_ids = []
+	archived_start_date = archived_start_date.strftime(r"%Y-%m-%d %H:%S:%M")
 	for vidid in all_video_ids:
 		try:
 			res = youtube.videos().list(id = vidid, part = "snippet").execute()
@@ -231,9 +238,9 @@ def filter_user_video_by_date(all_video_ids, archived_start_date):
 			youtube = build('youtube',"v3", developerKey=api_key)
 			res = youtube.videos().list(id = vidid, part = "snippet").execute()
 		published_at =  dateparser.parse(res["items"][0]["snippet"]["publishedAt"])
-			
+		published_at = published_at.strftime(r"%Y-%m-%d %H:%S:%M")
 		if published_at > archived_start_date:
-			video_ids += vidid
+			video_ids.append(vidid)
 	return(video_ids)
 
 
@@ -260,7 +267,8 @@ def get_ids_from_videos(videos, archived_start_date):
 			except Exception as e:
 				print(str(e))
 		if archived_start_date == None or video_time > archived_start_date:
-			video_ids += [video["snippet"]["resourceId"]["videoId"]]
+			video_ids.append([video["snippet"]["resourceId"]["videoId"]])
+
 	return video_ids
 
 def get_video_comments(youtube, **kwargs):
@@ -325,49 +333,62 @@ def video_collector(video_ids, storage_folder ,id):
 		try:
 			ydl.download([url])	
 			csv_row.append("True")
-
+			print("here01")
 
 		except Exception as e:
+			print("here1")
 			csv_row.append('False')
 			print(str(e))
 			print(vidid)
-			with open(os.path.join(storage_folder, vidid,'errors_{}.txt'.format(dt.now().strftime('%Y%m%d'))), "a") as f:
+			print("here1_2")
+			with open(os.path.join(storage_folder, 'errors_{}.txt'.format(dt.now().strftime('%Y%m%d'))), "a") as f:
 				f.write(vidid + "|" + id + " " + str(e) )
 				f.write("\n")
-				flag = False					
-		try:
-			res = youtube.videos().list(id = vidid, part = "snippet").execute()
-			
-		except Exception as e:
-			youtube = build('youtube',"v3", developerKey=api_key)
+				flag = False
+				print("here1_3")
+		if flag:		
 			try:
+				print("here3")
 				res = youtube.videos().list(id = vidid, part = "snippet").execute()
+				
 			except Exception as e:
-				pass
-		
-		if res:
-			if res == []:
-				csv_row.append("False")
+				print("here4")
+				youtube = build('youtube',"v3", developerKey=api_key)
+				try:
+					res = youtube.videos().list(id = vidid, part = "snippet").execute()
+				except Exception as e:
+					pass
+			
+			if res:
+				print("here5")
+				if res == []:
+					csv_row.append("False")
+				else:
+					csv_row.append('True')
 			else:
-				csv_row.append('True')
-		else:
-			csv_row.append("False")
-		print(csv_row)
-		with open(os.path.join(storage_folder, vidid, vidid+'{}.json'.format(dt.now().strftime('%Y%m%d'))), 'w') as json_file:
-			json.dump(res, json_file)
-		try:
-			comments = get_video_comments(youtube, part='snippet', videoId=vidid)
-			with open(os.path.join(storage_folder, vidid, vidid+'_comments_{}.json'.format(dt.now().strftime('%Y%m%d'))), 'w') as json_file:
-				json.dump(comments, json_file)
+				print("here6")
+				csv_row.append("False")
+			print(csv_row)
+			if flag:
+				with open(os.path.join(storage_folder, vidid, vidid+'{}.json'.format(dt.now().strftime('%Y%m%d'))), 'w') as json_file:
+					json.dump(res, json_file)
+			print("here8")
+			try:
+				print("here9")
+				comments = get_video_comments(youtube, part='snippet', videoId=vidid)
+				with open(os.path.join(storage_folder, vidid, vidid+'_comments_{}.json'.format(dt.now().strftime('%Y%m%d'))), 'w') as json_file:
+					json.dump(comments, json_file)
 
-		except Exception as e:
-			print(str(e))
-			print(vidid)
-			with open(os.path.join(storage_folder, vidid,'errors_{}.txt '.format(dt.now().strftime('%Y%m%d'))), "a") as f:
-				f.write(vidid + "|" + id + " " + str(e) )
-				f.write("\n")
+			except Exception as e:
+				print("here10")
+				print(str(e))
+				print(vidid)
+				with open(os.path.join(storage_folder, vidid,'errors_{}.txt '.format(dt.now().strftime('%Y%m%d'))), "a") as f:
+					f.write(vidid + "|" + id + " " + str(e) )
+					f.write("\n")
 		
 		if comments:
+			print("here11")
 			if comments == []:
 				csv_row.append("False")
 			else:
@@ -379,6 +400,7 @@ def video_collector(video_ids, storage_folder ,id):
 	print(csv_rows)
 	print(os.path.join(storage_folder, id+'.csv'))
 	with open (os.path.join(storage_folder, id+'.csv'), 'a') as f:
+		print("here12")
 		csv_writer = csv.writer(f, quoting=csv.QUOTE_NONE)
 		#csv_writer.writerow (["Id","Video id","Date Time", "Video", "Metadata", "Comments"]) # write header
 		csv_writer.writerows(csv_rows)
