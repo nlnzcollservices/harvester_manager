@@ -123,6 +123,7 @@ def item_parser(item):
 			item = tiktok_get_videos(item)
 		elif item.content_type == "FacebookVideo" and item.content_type in my_content_types:
 			print (f"working on: {item.id} - {item.content_type}")
+			item = facebook_get_video(item)
 		elif item.content_type == "FacebookVideos" and item.content_type in my_content_types:
 			print (f"working on: {item.id} - {item.content_type}")
 			item = facebook_get_videos(item)
@@ -182,7 +183,8 @@ def main():
 
 	row_count  = ws.row_count
 	for row_number, row in enumerate(ws.get_all_values()[1:], start = 2):
-		if row_number:
+		if row_number==167:
+
 			item = Item(row, row_number)
 			item_parser(item)
 
