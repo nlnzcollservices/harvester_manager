@@ -120,7 +120,17 @@ def get_videos(item):
 		driver.get(item.url)
 		driver.maximize_window()
 		sleep(2)
-		login_button = driver.find_element_by_tag_name("a").click()
+		try:
+			login_button = driver.find_element_by_tag_name("a").click()
+		except:
+			button_flag = False
+			login_button = driver.find_elements_by_tag_name('a')
+			for el in login_button:
+				if not button_flag:
+					if "login" in el.get_attribute("href"):
+						el.click()
+						button_flag = True
+		print("here6")
 		driver.find_element_by_id("email").send_keys(facebook_login)
 		driver.find_element_by_id("pass").send_keys(facebook_password)
 		login_button = driver.find_element_by_tag_name("form").submit()
@@ -162,14 +172,20 @@ def get_videos(item):
 		print(len(my_links_dict))
 		for i,link in enumerate(my_links):
 			print(link)
+			# if "?" in link:
+			# 	link = link.split("?")[0]
 			sleep(5)
 			title = ""
-			video_id = link.split("/")[-2]
+			video_id = link.rstrip("/").split("/")[-1]
 			print(downloaded_files)
+			#print(link)
+			print("here8")
 			print(video_id+".mp4")
+			#my_path = os.path.join(item.storage_folder, video_id, video_id+".mp4")
+			print(os.getcwd())
 			if not video_id+".mp4"  in downloaded_files:
 				
-				command = ['python',r'C:\Source\fbdown.py', link]
+				command = ['python',r'C:\Source\fbdown.py', link]#"--output", my_path]
 				try:
 					subprocess.call(command, shell=True)
 				except Exception as e:
