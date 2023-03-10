@@ -11,8 +11,8 @@ import configparser
 from insta_harvesters import get_live as insta_get_live
 from insta_harvesters import get_account as insta_get_account
 from insta_harvesters import get_video as insta_get_video
-from tiktok_harvesters_2 import get_tiktok_video as tiktok_get_video
-from tiktok_harvesters_2 import get_tiktok_videos as tiktok_get_videos
+from tiktok_harvesters_3 import get_tiktok_video as tiktok_get_video
+from tiktok_harvesters_selenium3 import get_tiktok_videos as tiktok_get_videos
 from facebook_harvesters_2 import get_video as facebook_get_video
 from facebook_harvesters_2 import get_videos as facebook_get_videos
 from twitter_harvesters import get_tweet as twitter_get_tweet
@@ -108,9 +108,10 @@ def item_parser(item):
 	It takes a properly populated item() class data object and passes it to the approriate harvester based on the contentType string. 
 	New Harvesters are added here. 
 	"""
+	print("here0")
 	if item.ready == "Y" and item.collected != "Y":
 		print("here")
-		if item.content_type == "InstagramAccount" and item.content_type in my_content_types:
+		if item.content_type == "InstagramAccount" and item.scontent_type in my_content_types:
 			print (f"working on: {item.id} - {item.content_type}")
 			item = insta_get_account(item)
 		elif item.content_type == "InstagramLive" and item.content_type in my_content_types:
@@ -187,7 +188,7 @@ def main():
 
 	row_count  = ws.row_count
 	for row_number, row in enumerate(ws.get_all_values()[1:], start = 2):
-		if row_number==170:
+		if row_number==196:#and row_number in ['110025', '110032', '110033', '110039', '100094', '100117', '110164', '110178', '110183', '110184', '110185', '110186', '110187', '110195', '110199', '11200']:
 			item = Item(row, row_number)
 			item_parser(item)
 
